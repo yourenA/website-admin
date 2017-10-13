@@ -1,0 +1,136 @@
+
+
+#root{
+  height: 100%;
+  overflow: hidden;
+}
+.gu-mirror {
+  display: none;
+}
+.gu-hide{
+  //display: block !important;
+}
+.ant-layout{
+  height: 100%;
+  .logo{
+    height: 32px;
+    background: #333;
+    border-radius: 6px;
+    margin: 16px;
+    text-align: left;
+    line-height: 32px;
+    overflow: hidden;
+    img{
+      display: inline-block;
+      vertical-align: middle;
+      width: 26px;
+      height: 26px;
+      margin-left: 6px;
+    }
+    span{
+      display: inline-block;
+      vertical-align: middle;
+      color: #ffffff;
+      margin-left: 6px;
+      font-size: 16px;
+    }
+  }
+  .trigger {
+    font-size: 18px;
+    line-height: 64px;
+    padding: 0 16px;
+    cursor: pointer;
+    transition: color .3s;
+    color: #ffffff;
+  }
+
+  .trigger:hover {
+    color: #1DA57A;
+  }
+  .logout{
+    float: right;
+    color: #ffffff;
+    margin-right: 10px;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+}
+
+.content{
+  padding-top: 16px;
+  position: relative;
+  .ant-card{
+    margin: 10px;
+  }
+  .card-title{
+    margin-bottom: 20px;
+  }
+  .card-sync{
+    position: absolute;
+    right:24px;
+    top:28px
+  }
+}
+
+.avatar-uploader,
+.avatar-uploader-trigger,
+.avatar {
+  width: 100px;
+  height: 100px;
+}
+.banner{
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+
+.icon {
+  width: 80px;
+  height: auto;
+  cursor: pointer;
+}
+
+.avatar-uploader {
+  display: block;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.avatar-uploader-trigger{
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 28px;
+  color: #999;
+}
+.icon-uploader-trigger,.banner-uploader-trigger{
+  padding: 10px;
+  font-size: 28px;
+  border: 1px dashed #d9d9d9;
+  cursor: pointer;
+}
+
+.edit-btn{
+  text-align: center;
+  .ant-btn{
+    margin-left: 15px;
+  }
+}
+
+.deletePadding{
+  padding: 0 !important;
+}
+
+.operate-box{
+  margin-bottom: 15px;
+  margin-top: 15px;
+  .search-wrap{
+    display: inline-block;
+  }
+  .ant-btn{
+    float: right;
+  }
+}
