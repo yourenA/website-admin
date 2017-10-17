@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Table, Pagination, Button, Modal, Popconfirm, Layout,message} from 'antd';
+import {Breadcrumb, Table, Icon, Button, Modal, Popconfirm, Layout,message} from 'antd';
 import axios from 'axios'
 import {
     Link
@@ -11,19 +11,12 @@ import SearchWrap from  './search';
 import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
 import AddOrEditName from './addOrEditNmae';
+import Avatar from './avatar';
 import messageJson from './../../common/message.json';
-import icon1 from './../../images/icon1.png'
-import icon2 from './../../images/icon2.png'
-import icon3 from './../../images/icon3.png'
-import icon4 from './../../images/icon5.png'
-import icon5 from './../../images/icon4.png'
-import image1 from './../../images/1.jpg'
-import image2 from './../../images/2.jpg'
-import image3 from './../../images/3.jpg'
-import image4 from './../../images/item4.jpg'
-import image5 from './../../images/5.jpg'
+import avatar from './../../images/avatar.png'
 import {connect} from 'react-redux';
 import './index.less'
+import Pswp  from './../../components/pswp'
 const {Content,} = Layout;
 class Manufacture extends Component {
     constructor(props) {
@@ -35,7 +28,9 @@ class Manufacture extends Component {
             page: 1,
             meta: {pagination: {total: 0, per_page: 0}},
             editModal: false,
-            addModal: false
+            addModal: false,
+            imageUrl:'',
+            open:0
         };
     }
 
@@ -47,17 +42,11 @@ class Manufacture extends Component {
         const that = this;
                 that.setState({
                     loading: false,
-                    data: [{
-                        id: 0,
-                        icon: icon5,
-                        name: '产品0',
-                        desc: '电动助力转向系统（Electric Power Steering），既节省能量，又保护了环境。',
-                        image:image1
-                    },
-                        {id: 1, icon: icon3,image:image5, name: '产品1', desc: '电动助力转向系统（Electric Power Steering），既节省能量，又保护了环境。'},
-                        {id: 2, icon: icon4,image:image2, name: '产品2', desc: '电动助力转向系统（Electric Power Steering），既节省能量，又保护了环境。'},
-                        {id: 3, icon: icon1,image:image3, name: '产品3', desc: '电动助力转向系统（Electric Power Steering），既节省能量，又保护了环境。'},
-                        {id: 4, icon: icon2,image:image4, name: '产品4', desc: '电动助力转向系统（Electric Power Steering），既节省能量，又保护了环境。'}],
+                    data:[{date:"2017-10-16 10:40:50",image:'http://img.weiot.net/portal/201401/29/200809um073mx02zoxdk7p.gif',desc:'这是简要新闻，包含一张图片，描述文字字数限制在140以内,描述文字字数限制在140以内,描述文字字数限制在140以内,描述文字字数限制在140以内，描述文字字数限制在140以内,描述文字字数限制在140以内,描述文字字数限制在140以内,描述文字字数限制在140以内.'},
+                        {date:"2017-10-16 10:40:50",image:'http://f12.baidu.com/it/u=1505322598,1727959990&fm=72 ',desc:'这是简要新闻，包含一张图片，描述文字字数限制在140以内'},
+                        {date:"2017-10-16 10:40:50",image:'http://f12.baidu.com/it/u=1505322598,1727959990&fm=72',desc:'这是简要新闻，包含一张图片，描述文字字数限制在140以内'},
+                        {date:"2017-10-16 10:40:50",image:'http://f12.baidu.com/it/u=1505322598,1727959990&fm=72',desc:'这是简要新闻，包含一张图片，描述文字字数限制在140以内'},
+                        {date:"2017-10-16 10:40:50",image:'http://f12.baidu.com/it/u=1505322598,1727959990&fm=72',desc:'这是简要新闻，包含一张图片，描述文字字数限制在140以内'},]
                 })
     }
     addData = ()=> {
@@ -132,76 +121,57 @@ class Manufacture extends Component {
         const {q}=this.state;
         this.onChangeSearch(page, q);
     };
-
+    openGallery=(image)=>{
+        this.setState({
+            open:this.state.open+1,
+            imageUrl:image
+        })
+    }
     render() {
         const {data, page, meta} = this.state;
-        const columns = [{
-            title: '产品名称',
-            dataIndex: 'name',
-            key: 'name',
-        },  {
-            title: '操作',
-            key: 'action',
-            width: this.props.responsive.isMobile?75:150,
-            render: (text, record, index) => {
-                return (
-                    <div key={index}>
-                        <Link
-                            to={{
-                                pathname:`${this.props.match.url}/${record.id}`,
-                            }}
-                        ><Button  type="primary">详情</Button></Link>
-                        {this.props.responsive.isMobile?null: <span className="ant-divider"/>}
-                        <Popconfirm placement="topRight" title={ `确定要删除吗?`}
-                                    onConfirm={this.delData.bind(this, record.id)}>
-                            <button className="ant-btn ant-btn-danger">
-                                删除
-                            </button>
-                        </Popconfirm>
-
+        const that=this;
+        const renderNews=this.state.data.map(function (item,index) {
+            return(
+                <li key={index}>
+                    <div className="news-content">
+                        <div className="date">
+                            {item.date}
+                        </div>
+                        <div className="desc">{item.desc}</div>
+                        <div className="image"><img src={item.image} alt="" onClick={()=>that.openGallery(item.image)}/></div>
+                        <div className="edit-icon">
+                            <Icon type="edit" onClick={()=>that.setState({editRecord:item,editModal:true})}/>
+                            <Popconfirm placement="bottomRight" title={ `确定要删除吗?`}>
+                                <Icon type="delete" />
+                            </Popconfirm>
+                        </div>
                     </div>
-                )
-            }
-        }];
+                </li>
+            )
+        })
         return (
             <div className="content config">
-
                 <Content style={{background: '#fff', padding: '10px'}}>
-                    <Breadcrumb className="breadcrumb">
-                        <Breadcrumb.Item>产品分类</Breadcrumb.Item>
-                        <Breadcrumb.Item>EPB电子驻车制动系统</Breadcrumb.Item>
-                    </Breadcrumb>
-                    <div className="operate-box">
-                        <SearchWrap onChangeSearch={this.onChangeSearch} {...this.state} {...this.props}/>
-                        <Link
-                            to={{
-                                pathname:`${this.props.match.url}/new`,
-                            }}
-                        ><Button  type="primary">添加产品</Button></Link>
+                    <div className="news-box">
+                        <div className="news-top">
+                            <div className="left-avatar">
+                                <div className="left-avatar">
+                                    <Avatar imageUrl={avatar} />
+                                </div>
+                            </div>
+                            <div className="right-input">
+                                <AddOrEditName />
+                            </div>
+                        </div>
+                        <div className="news-list">
+                            <ul>
+                                {renderNews}
+                            </ul>
+                        </div>
                     </div>
-                    <Table bordered className="category-table"
-                           loading={this.state.loading}
-                           size={this.props.responsive.isMobile?'small':'default'}
-                           rowKey="id" columns={columns}
-                           dataSource={data} pagination={false}/>
-                    <Pagination total={meta.pagination.total} current={page} pageSize={meta.pagination.per_page}
-                                style={{marginTop: '10px'}} onChange={this.onPageChange}/>
-                    {
-                        this.props.responsive.isMobile && (
-                            <style>
-                                {`
-                            .ant-table *{
-                                font-size: 12px  !important;
-                            }
-                            .ant-table .ant-btn{
-                                margin-bottom:5px;
-                            }
-                        `}
-                            </style>
-                        )
-                    }
-                </Content>
 
+                </Content>
+                <Pswp imageUrl={this.state.imageUrl}  open={this.state.open}/>
                 <Modal
                     key={ Date.parse(new Date())}
                     visible={this.state.addModal}

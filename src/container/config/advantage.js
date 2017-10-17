@@ -53,7 +53,7 @@ class DynamicFieldSet extends React.Component {
         const formItemLayoutWithOutLabel = {
             wrapperCol: {
                 xs: {span: 24, offset: 0},
-                sm: {span: 20, offset: 4},
+                sm: {span: 18, offset: 6},
             },
         };
         const keysArr=[];

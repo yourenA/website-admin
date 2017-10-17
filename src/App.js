@@ -40,6 +40,12 @@ import(/* webpackChunkName: "Products" */ "./container/products/index")
 const ProductDetail = asyncComponent(() =>
 import(/* webpackChunkName: "ProductDetail" */ "./container/productDetail/index")
 )
+const News = asyncComponent(() =>
+import(/* webpackChunkName: "News" */ "./container/news/index")
+)
+const Data = asyncComponent(() =>
+import(/* webpackChunkName: "Data" */ "./container/websiteData/index")
+)
 const customHistory = createBrowserHistory()
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -115,6 +121,8 @@ class App extends Component {
                             <Route exact  path="/products" component={Category}/>
                             <Route exact path="/products/:categoryId" component={Products}/>
                             <Route  path="/products/:categoryId/:productId" component={ProductDetail}/>
+                            <Route  path="/news" component={News}/>
+                            <Route  path="/data" component={Data}/>
                         </Content>
                         <Footer style={{ textAlign: 'center' }}>
                             广州辂轺科技有限公司

@@ -84,8 +84,8 @@ class SiderCustom extends Component {
                     <Menu.Item key="/news">
                         <Link to={'/news'}><Icon type="rocket" /><span className="nav-text">公司简闻</span></Link>
                     </Menu.Item>
-                    <Menu.Item key="/dates">
-                        <Link to={'/dates'}><Icon type="line-chart" /><span className="nav-text">网站访问数据</span></Link>
+                    <Menu.Item key="/data">
+                        <Link to={'/data'}><Icon type="line-chart" /><span className="nav-text">网站访问数据</span></Link>
                     </Menu.Item>
                 {/*    <SubMenu
                  key="/app/ui"

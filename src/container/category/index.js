@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Tooltip, Table, Pagination, Button, Modal, Popconfirm, Layout,message} from 'antd';
+import {Tooltip, Table, Pagination, Button, Modal, Popconfirm, Layout,message,Breadcrumb} from 'antd';
 import axios from 'axios'
 import {
     Link
@@ -23,6 +23,7 @@ import image3 from './../../images/3.jpg'
 import image4 from './../../images/item4.jpg'
 import image5 from './../../images/5.jpg'
 import {connect} from 'react-redux';
+import Pswp  from './../../components/pswp'
 import './index.less'
 const {Content,} = Layout;
 class Manufacture extends Component {
@@ -35,7 +36,9 @@ class Manufacture extends Component {
             page: 1,
             meta: {pagination: {total: 0, per_page: 0}},
             editModal: false,
-            addModal: false
+            addModal: false,
+            open:0,
+            imageUrl:''
         };
     }
 
@@ -132,7 +135,12 @@ class Manufacture extends Component {
         const {q}=this.state;
         this.onChangeSearch(page, q);
     };
-
+    openGallery=(image)=>{
+        this.setState({
+            open:this.state.open+1,
+            imageUrl:image
+        })
+    }
     render() {
         const {data, page, meta} = this.state;
         const columns = [{
@@ -168,7 +176,7 @@ class Manufacture extends Component {
             key: 'image',
             render: (text, record, index) => {
                 return (
-                    <div key={index} className="image">
+                    <div key={index} className="image" onClick={()=>this.openGallery(text)} style={{cursor:'pointer'}}>
                         <img src={text} alt=""/>
                     </div>
                 )
@@ -222,7 +230,9 @@ class Manufacture extends Component {
         }];
         return (
             <div className="content config">
-
+                <Breadcrumb className="breadcrumb">
+                    <Breadcrumb.Item>产品分类</Breadcrumb.Item>
+                </Breadcrumb>
                 <Content style={{background: '#fff', padding: '10px'}}>
                     <div className="operate-box">
                         <SearchWrap onChangeSearch={this.onChangeSearch} {...this.state} {...this.props}/>
@@ -253,7 +263,7 @@ class Manufacture extends Component {
                         )
                     }
                 </Content>
-
+                <Pswp imageUrl={this.state.imageUrl}  open={this.state.open}/>
                 <Modal
                     key={ Date.parse(new Date())}
                     visible={this.state.addModal}

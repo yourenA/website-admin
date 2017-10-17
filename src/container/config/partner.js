@@ -86,7 +86,7 @@ class Partner extends Component {
                     footer={[
                         <Button key="back" type="ghost" size="large"
                                 onClick={()=> {
-                                    this.setState({editModal: false})
+                                    this.setState({addModal: false})
                                 }}>取消</Button>,
                         <Button key="submit" type="primary" size="large" onClick={this.addData}>
                             保存

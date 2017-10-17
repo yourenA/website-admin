@@ -2,14 +2,7 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Alert, Icon, Button, Modal, Popconfirm, Layout, message} from 'antd';
-import axios from 'axios'
-import {
-    Link
-} from 'react-router-dom';
-import SearchWrap from  './search';
-import configJson from 'configJson' ;
-import {getHeader, converErrorCodeToMsg} from './../../common/common';
+import {Breadcrumb, Alert, Icon, Button, Modal, Popconfirm, Layout, Col,Card} from 'antd';
 import AddOrEditName from './addOrEditNmae';
 import messageJson from './../../common/message.json';
 import pc1 from './../../images/3.jpg'
@@ -18,8 +11,10 @@ import pc3 from './../../images/2.jpg'
 import pc4 from './../../images/5.jpg'
 import {connect} from 'react-redux';
 import Dragula from 'react-dragula';
+import TitleImage from './titleImage';
 import './index.less'
 import {sortable} from 'react-sortable';
+import Pswp  from './../../components/pswp'
 const {Content,} = Layout;
 class ListItem extends Component {
     render () {
@@ -41,7 +36,9 @@ class Manufacture extends Component {
             page: 1,
             meta: {pagination: {total: 0, per_page: 0}},
             editModal: false,
-            addModal: false
+            addModal: false,
+            imageUrl:'',
+            open:0,
         };
     }
 
@@ -108,6 +105,12 @@ class Manufacture extends Component {
             }
         });
     }
+    openGallery=(image)=>{
+        this.setState({
+            open:this.state.open+1,
+            imageUrl:image
+        })
+    }
     render() {
         const that = this;
         const {data, page, meta} = this.state;
@@ -123,7 +126,7 @@ class Manufacture extends Component {
                 >
                     <li>
                         <div className="left">
-                            <img src={item.image} alt=""/>
+                            <img src={item.image} alt="" onClick={()=>{that.openGallery(item.image)}} style={{cursor:'pointer'}}/>
                         </div>
                         <div className="right">
                             <h3>{item.title}</h3>
@@ -144,10 +147,18 @@ class Manufacture extends Component {
 
                 <Content style={{background: '#fff', padding: '10px'}}>
                     <Breadcrumb className="breadcrumb">
-                        <Breadcrumb.Item>产品与服务</Breadcrumb.Item>
+                        <Breadcrumb.Item>产品分类</Breadcrumb.Item>
                         <Breadcrumb.Item>EPB电子驻车制动系统</Breadcrumb.Item>
                         <Breadcrumb.Item>新建产品</Breadcrumb.Item>
                     </Breadcrumb>
+                    <Col sm={24}  md={18} lg={10}>
+                        <div >
+                            <Card title="产品页面顶部图片">
+                                <TitleImage  imageUrl={pc1}/>
+                            </Card>
+                        </div>
+                    </Col>
+                    <div className="clearfix"></div>
                     <Alert message="拖动每一个内容块可以改变顺序" type="info" closable
                            style={{marginTop: '10px', marginBottom: '10px'}}/>
                     <div style={{marginTop: '10px', marginBottom: '10px'}}>
@@ -173,7 +184,7 @@ class Manufacture extends Component {
                         )
                     }
                 </Content>
-
+                <Pswp imageUrl={this.state.imageUrl}  open={this.state.open}/>
                 <Modal
                     key={ Date.parse(new Date())}
                     visible={this.state.addModal}

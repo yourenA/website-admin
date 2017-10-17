@@ -10,6 +10,15 @@
 .gu-hide{
   //display: block !important;
 }
+.breadcrumb{
+  font-size: 16px !important;
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+}
+.ant-alert-message{
+  font-size: 14px !important;
+}
 .ant-layout{
   height: 100%;
   .logo{
@@ -87,7 +96,23 @@
   height: auto;
   cursor: pointer;
 }
-
+.title-image{
+  width: 100%;
+  height: auto;
+  //max-width: 400px;
+  cursor: pointer;
+}
+.clearfix{
+  *zoom: 1;
+  &:before, &:after {
+    content: "";
+    display: table;
+  }
+  &:after {
+    clear: both;
+    overflow: hidden;
+  }
+}
 .icon {
   width: 80px;
   height: auto;
