@@ -230,10 +230,11 @@ class Manufacture extends Component {
         }];
         return (
             <div className="content config">
-                <Breadcrumb className="breadcrumb">
-                    <Breadcrumb.Item>产品分类</Breadcrumb.Item>
-                </Breadcrumb>
+
                 <Content style={{background: '#fff', padding: '10px'}}>
+                    <Breadcrumb className="breadcrumb">
+                        <Breadcrumb.Item>产品分类</Breadcrumb.Item>
+                    </Breadcrumb>
                     <div className="operate-box">
                         <SearchWrap onChangeSearch={this.onChangeSearch} {...this.state} {...this.props}/>
                         <Button type="primary" icon="plus" onClick={()=> {
