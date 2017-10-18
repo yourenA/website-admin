@@ -99,7 +99,7 @@ class Partner extends Component {
                 <Modal
                     key={ Date.parse(new Date()) + 1}
                     visible={this.state.editModal}
-                    title="修改制造厂商"
+                    title="修改合作伙伴"
                     onCancel={()=> {
                         this.setState({editModal: false})
                     }}

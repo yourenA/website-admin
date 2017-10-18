@@ -151,24 +151,13 @@ class Manufacture extends Component {
                 if(text){
                     return (
                         <Tooltip title={text}>
-                            <span>{this.props.responsive.isMobile?text.substr(0, 5):text.substr(0, 20)}</span>
+                            <span>{this.props.responsive.isMobile?text.substr(0, 5):text.substr(0, 35)}</span>
                         </Tooltip>
                     )
                 }else{
                     return null
                 }
 
-            }
-        },{
-            title: 'ICON',
-            dataIndex: 'icon',
-            key: 'icon',
-            render: (text, record, index) => {
-                return (
-                    <div key={index} className="icon">
-                        <img src={text} alt=""/>
-                    </div>
-                )
             }
         }, {
             title: '图片',

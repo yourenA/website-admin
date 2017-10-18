@@ -47,15 +47,14 @@ class AddOrEditNameForm extends React.Component {
             <Form onSubmit={this.handleSubmit} className="login-form">
                     <div>
                         <FormItem
-                            label={'分类名称'}
+                            label={'标题'}
                             {...formItemLayout}>
-                            {getFieldDecorator('name', {
-                                initialValue: this.props.isEdit ? this.props.editRecord.name : '',
+                            {getFieldDecorator('title', {
+                                initialValue: this.props.isEdit ? this.props.editRecord.title : '',
                             })(
                                 <Input  />
                             )}
                         </FormItem>
-
                         <FormItem
                             label={'描述'}
                             {...formItemLayout}>
@@ -67,7 +66,7 @@ class AddOrEditNameForm extends React.Component {
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
-                            label="分类图片"
+                            label="图片"
                         >
                             <div className="dropbox">
                                 {getFieldDecorator('dragger', {
@@ -83,14 +82,16 @@ class AddOrEditNameForm extends React.Component {
                                         onChange={this.handleChange}
                                     >
                                         {
-                                            this.props.isEdit ?
-                                                <img src={this.props.editRecord.image} alt="" className="banner" /> :
+                                             this.props.isEdit ?
+                                                <img src={this.props.editRecord.imageUrl} alt="" className="banner" /> :
                                                 <Icon type="plus" className="banner-uploader-trigger" />
                                         }
                                     </Upload>
                                 )}
                             </div>
                         </FormItem>
+
+
                     </div>
             </Form>
         );

@@ -31,7 +31,6 @@ class TitleAndLogo extends React.Component {
                 <Row >
                     <Masonry
                         className={'my-gallery-class'} // default ''
-                        elementType={'ul'} // default 'div'
                         options={masonryOptions} // default {}
                         disableImagesLoaded={false} // default false
                         updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
@@ -52,22 +51,9 @@ class TitleAndLogo extends React.Component {
                             <div >
                                 <Card bordered={false}>
                                     <div className="card-title">
-                                        <h2>Banner</h2>
+                                        <h2>首页轮播图</h2>
                                     </div>
                                     <Banner/>
-                                </Card>
-                            </div>
-                        </Col>
-                        <Col  sm={24} md={12} lg={8}>
-                            <div >
-                                <Card bordered={false}>
-                                    <div className="card-title">
-                                        <h2>我们的优势</h2>
-                                        <small>该模块的ICON采用'Font Awesome'图标，在ICON字段中填入相关的'Font Awesome'图标名称，如'address-book'。注意不用填写前缀'fa-'。详情
-                                            <a href="http://www.fontawesome.com.cn/faicons/">http://www.fontawesome.com.cn/faicons/</a></small>
-                                    </div>
-                                    <a className="card-sync"><Icon type="sync" /></a>
-                                    <Advantage advantage={this.state.advantage}/>
                                 </Card>
                             </div>
                         </Col>
@@ -91,6 +77,21 @@ class TitleAndLogo extends React.Component {
                                 </Card>
                             </div>
                         </Col>
+                        <Col  sm={24} md={12} lg={8}>
+                            <div >
+                                <Card bordered={false}>
+                                    <div className="card-title">
+                                        <h2>我们的优势</h2>
+                                        <small>该模块的ICON采用'Font Awesome'图标，在ICON字段中填入相关的'Font Awesome'图标名称，如'address-book'。注意不用填写前缀'fa-'。详情
+                                            <a href="http://www.fontawesome.com.cn/faicons/">http://www.fontawesome.com.cn/faicons/</a></small>
+                                    </div>
+                                    <a className="card-sync"><Icon type="sync" /></a>
+                                    <Advantage advantage={this.state.advantage}/>
+                                </Card>
+                            </div>
+                        </Col>
+
+
                         <Col sm={24}  md={12} lg={8}>
                             <div >
                                 <Card bordered={false}>
