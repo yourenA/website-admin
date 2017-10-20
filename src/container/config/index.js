@@ -35,7 +35,7 @@ class TitleAndLogo extends React.Component {
                         disableImagesLoaded={false} // default false
                         updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
                     >
-                        <Col sm={24}  md={12} lg={8}>
+                        <Col xs={24} sm={24}  md={12} lg={8}>
                             <div >
                                 <Card bordered={false}>
                                     <div className="card-title">
@@ -47,7 +47,7 @@ class TitleAndLogo extends React.Component {
                                 </Card>
                             </div>
                         </Col>
-                        <Col sm={24}  md={12} lg={8}>
+                        <Col xs={24} sm={24}  md={12} lg={8}>
                             <div >
                                 <Card bordered={false}>
                                     <div className="card-title">
@@ -57,7 +57,7 @@ class TitleAndLogo extends React.Component {
                                 </Card>
                             </div>
                         </Col>
-                        <Col sm={24}  md={12} lg={8}>
+                        <Col  xs={24} sm={24}  md={12} lg={8}>
                             <div >
                                 <Card bordered={false}>
                                     <div className="card-title">
@@ -67,7 +67,7 @@ class TitleAndLogo extends React.Component {
                                 </Card>
                             </div>
                         </Col>
-                        <Col sm={24}  md={12} lg={8}>
+                        <Col xs={24} sm={24}  md={12} lg={8}>
                             <div >
                                 <Card bordered={false}>
                                     <div className="card-title">
@@ -77,7 +77,7 @@ class TitleAndLogo extends React.Component {
                                 </Card>
                             </div>
                         </Col>
-                        <Col  sm={24} md={12} lg={8}>
+                        <Col  xs={24} sm={24} md={12} lg={8}>
                             <div >
                                 <Card bordered={false}>
                                     <div className="card-title">
@@ -92,7 +92,7 @@ class TitleAndLogo extends React.Component {
                         </Col>
 
 
-                        <Col sm={24}  md={12} lg={8}>
+                        <Col  xs={24} sm={24}  md={12} lg={8}>
                             <div >
                                 <Card bordered={false}>
                                     <div className="card-title">

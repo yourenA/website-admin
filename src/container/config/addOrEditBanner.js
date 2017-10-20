@@ -65,6 +65,15 @@ class AddOrEditNameForm extends React.Component {
                             )}
                         </FormItem>
                         <FormItem
+                            label={'链接地址'}
+                            {...formItemLayout}>
+                            {getFieldDecorator('url', {
+                                initialValue: this.props.isEdit ? this.props.editRecord.url : '',
+                            })(
+                                <Input   />
+                            )}
+                        </FormItem>
+                        <FormItem
                             {...formItemLayout}
                             label="图片"
                         >
@@ -90,7 +99,6 @@ class AddOrEditNameForm extends React.Component {
                                 )}
                             </div>
                         </FormItem>
-
 
                     </div>
             </Form>

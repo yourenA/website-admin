@@ -43,7 +43,7 @@ class Demo extends React.Component {
         this.setState({
             draggingIndex: null,
             imageUrl:'/pc1.jpg',
-            data:[{imageUrl:pc1,title:'辂轺科技',desc:'专注于汽车电子控制单元产品开发'},{imageUrl:pc2,title:'辂轺产品',desc:'专注于汽车电子控制单'},{imageUrl:pc3,title:'辂轺科技3',desc:'专注于汽车电专注于汽车电子控制单元产品开发'}]
+            data:[{imageUrl:pc1,title:'辂轺科技',desc:'专注于汽车电子控制单元产品开发',url:'/'},{imageUrl:pc2,title:'辂轺产品',desc:'专注于汽车电子控制单',url:'/products'},{imageUrl:pc3,title:'辂轺科技3',desc:'专注于汽车电专注于汽车电子控制单元产品开发',url:'/news'}]
         })
     }
     handleChange = (info) => {
@@ -82,6 +82,7 @@ class Demo extends React.Component {
                     <div className="banner-table-row">
                         <div className="banner-table-cell">{item.title}</div>
                         <div className="banner-table-cell">{item.desc}</div>
+                        <div className="banner-table-cell">{item.url}</div>
                         <div className="banner-table-cell"><img src={item.imageUrl} alt=""/></div>
                         <div className="banner-table-cell">
                             <Button type='primary' onClick={()=> {
@@ -147,6 +148,7 @@ class Demo extends React.Component {
                     <div className="banner-table-row banner-table-row-header">
                         <div className="banner-table-cell">标题</div>
                         <div className="banner-table-cell">描述</div>
+                        <div className="banner-table-cell">链接</div>
                         <div className="banner-table-cell">图片</div>
                         <div className="banner-table-cell">操作</div>
                     </div>

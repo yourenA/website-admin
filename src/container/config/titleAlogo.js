@@ -33,6 +33,9 @@ class Demo extends React.Component {
             getBase64(info.file.originFileObj, imageUrl => this.setState({ imageUrl }));
         }
     }
+    reset=()=>{
+        this.props.form.resetFields();
+    }
     render() {
         const {getFieldDecorator} = this.props.form;
         const formItemLayout = {
@@ -98,7 +101,7 @@ class Demo extends React.Component {
                         )}
                     </FormItem>
                     <div className="edit-btn">
-                        <Button >重置</Button>
+                        <Button onClick={this.reset}>重置</Button>
                         <Button type="primary" htmlType="submit">确定</Button>
                     </div>
                 </Form>

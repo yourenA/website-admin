@@ -23,8 +23,8 @@ class Partner extends Component {
         const that=this;
         that.setState({
             meta: {pagination: {total: 2, per_page: 10}},
-            data:[{id:1,ip:'192.165.33.150',province:'广东',city:'广州',last_date:'2015/3/45 15:32:45'},{id:2,ip:'192.165.33.150',province:'广东',city:'广州',last_date:'2015/3/45 15:32:45'},{id:3,ip:'192.165.33.150',province:'广东',city:'广州',last_date:'2015/3/45 15:32:45'},
-                {id:89,ip:'192.165.33.150',province:'广东',city:'广州',last_date:'2015/3/45 15:32:45'},{id:233,ip:'192.165.33.150',province:'广东',city:'广州',last_date:'2015/3/45 15:32:45'},{id:23,ip:'158.65.69.22',province:'',city:'北京',last_date:'2015/3/45 15:32:45'},],
+            data:[{id:1,ip:'192.165.33.150',province:'广东',city:'广州',count:5,last_date:'2015/3/45 15:32:45'},{id:2,ip:'192.165.33.150',count:5,province:'广东',city:'广州',last_date:'2015/3/45 15:32:45'},{id:3,ip:'192.165.33.150',province:'广东',count:5,city:'广州',last_date:'2015/3/45 15:32:45'},
+                {id:89,ip:'192.165.33.150',province:'广东',city:'广州',count:5,last_date:'2015/3/45 15:32:45'},{id:233,ip:'192.165.33.150',count:5,province:'广东',city:'广州',last_date:'2015/3/45 15:32:45'},{id:23,ip:'158.65.69.22',province:'',city:'北京',count:5,last_date:'2015/3/45 15:32:45'},],
         })
 
     }
@@ -46,6 +46,10 @@ class Partner extends Component {
                     <p>{record.province+'/'+record.city}</p>
                 )
             }
+        }, {
+            title: '访问次数',
+            dataIndex: 'count',
+            key: 'count',
         }, {
             title: '最后访问时间',
             dataIndex: 'last_date',
