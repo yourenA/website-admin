@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/3/24.
  */
 import React from 'react';
-import {Form, Input, Icon, Upload,message} from 'antd';
+import {Form, Input, Icon, Upload,message,Button} from 'antd';
 const FormItem = Form.Item;
 function getBase64(img, callback) {
     const reader = new FileReader();
@@ -40,14 +40,25 @@ class AddOrEditNameForm extends React.Component {
     }
     render() {
         const formItemLayout = {
-            labelCol: {span: 6},
-            wrapperCol: {span: 18},
+            labelCol: {span: 4},
+            wrapperCol: {span: 20},
         };
         const {getFieldDecorator} = this.props.form;
         return (
             <Form onSubmit={this.handleSubmit} className="login-form">
                     <div>
                         <FormItem
+                            label={'产品名称'}
+                            {...formItemLayout}>
+                            {getFieldDecorator('name', {
+                                initialValue: this.props.isEdit ? this.props.editRecord.title : '',
+                            })(
+                                <Input  />
+                            )}
+                        </FormItem>
+                        <FormItem
+                            label={'顶部图片'}
+                            {...formItemLayout}
                         >
                             <div className="dropbox">
                                 {getFieldDecorator('dragger', {
@@ -71,7 +82,10 @@ class AddOrEditNameForm extends React.Component {
                                 )}
                             </div>
                         </FormItem>
-
+                        <div className="edit-btn">
+                            <Button >重置</Button>
+                            <Button type="primary" htmlType="submit">确定</Button>
+                        </div>
                     </div>
             </Form>
         );

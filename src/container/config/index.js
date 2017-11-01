@@ -9,6 +9,7 @@ import Advantage from './advantage'
 import Banner from './banner'
 import Contact from './contact'
 import Partner from './partner'
+import TextUpload from './textUpload'
 import FriendshipLink from './friendshipLink'
 class TitleAndLogo extends React.Component {
     constructor(props) {

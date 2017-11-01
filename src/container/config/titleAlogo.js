@@ -3,38 +3,73 @@
  */
 import React from 'react'
 import {Button, message, Icon, Upload, Input, Form} from 'antd';
+import axios from 'axios'
 const FormItem = Form.Item;
 
 function getBase64(img, callback) {
     const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
+    reader.addEventListener('load', () => {
+        console.log(reader.result)
+        callback(reader.result)
+    });
     reader.readAsDataURL(img);
 }
 
 function beforeUpload(file) {
-    console.log(file)
-    const isJPG = file.type .indexOf('image');
-    const isLt10KB = file.size / 1024  < 10;
-    if (!isLt10KB) {
-        message.error('Image must smaller than 10kb!');
+    const isImage = file.type.indexOf('image')>=0 ;
+    if (!isImage) {
+        message.error('必须上传图片');
     }
-    return isJPG && isLt10KB;
+    const isLt2M = file.size / 1024 / 1024 < 1;
+    if (!isLt2M) {
+        message.error('图片大小必须小于 1MB!');
+    }
+    return isImage && isLt2M;
 }
 class Demo extends React.Component {
     state = {};
     componentDidMount = ()=> {
         this.setState({
-            imageUrl:'/logo.png'
+            imageUrl:'http://localhost:3000/my-uploads/1509084144559-3 (1).jpg'
         })
     }
     handleChange = (info) => {
+        //
         if (info.file.status === 'done') {
+            console.log("info.file.originFileObj",info.file.originFileObj)
             // Get this url from response in real world.
             getBase64(info.file.originFileObj, imageUrl => this.setState({ imageUrl }));
         }
     }
     reset=()=>{
         this.props.form.resetFields();
+    }
+    normFile = (e) => {
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
+    }
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const that=this
+        console.log(that.state.imageUrl)
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('Received values of form: ', values);
+                axios({
+                    url: `http://localhost:3000/users`,
+                    method: 'POST',
+                    data:values
+                })
+                    .then(function (response) {
+
+                        console.log(response.data)
+                    }).catch(function (error) {
+                    console.log('获取出错', error);
+                })
+            }
+        });
     }
     render() {
         const {getFieldDecorator} = this.props.form;
@@ -45,21 +80,21 @@ class Demo extends React.Component {
         const imageUrl = this.state.imageUrl;
         return (
             <div >
-                <Form >
+                <Form onSubmit={this.handleSubmit}>
                     <FormItem
                         {...formItemLayout}
                         label="公司Logo"
                     >
                         <div className="dropbox">
-                            {getFieldDecorator('dragger', {
+                            {getFieldDecorator('profile', {
                                 valuePropName: 'fileList',
                                 getValueFromEvent: this.normFile,
                             })(
                                 <Upload
                                     className="avatar-uploader"
-                                    name="avatar"
+                                    name="profile"
                                     showUploadList={false}
-                                    action="http//jsonplaceholder.typicode.com/posts/"
+                                    action="http://localhost:3000/profile"
                                     beforeUpload={beforeUpload}
                                     onChange={this.handleChange}
                                 >

@@ -153,7 +153,7 @@ class Manufacture extends Component {
                     </Breadcrumb>
                     <Col sm={24}  md={18} lg={10}>
                         <div >
-                            <Card title="产品页面顶部图片">
+                            <Card title="产品名称及顶部图片">
                                 <TitleImage  imageUrl={pc1}/>
                             </Card>
                         </div>

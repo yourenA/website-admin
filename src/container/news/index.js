@@ -175,7 +175,7 @@ class Manufacture extends Component {
                 <Modal
                     key={ Date.parse(new Date())}
                     visible={this.state.addModal}
-                    title="添加制造厂商"
+                    title="添加简闻"
                     onCancel={()=> {
                         this.setState({addModal: false})
                     }}
@@ -194,7 +194,7 @@ class Manufacture extends Component {
                 <Modal
                     key={ Date.parse(new Date()) + 1}
                     visible={this.state.editModal}
-                    title="修改制造厂商"
+                    title="修改简闻"
                     onCancel={()=> {
                         this.setState({editModal: false})
                     }}

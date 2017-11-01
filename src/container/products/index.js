@@ -10,7 +10,7 @@ import {
 import SearchWrap from  './search';
 import configJson from 'configJson' ;
 import {getHeader, converErrorCodeToMsg} from './../../common/common';
-import AddOrEditName from './addOrEditNmae';
+import AddName from './addName';
 import messageJson from './../../common/message.json';
 import icon1 from './../../images/icon1.png'
 import icon2 from './../../images/icon2.png'
@@ -64,23 +64,24 @@ class Manufacture extends Component {
         const that = this;
         const {page, q}=this.state;
         const addName = this.refs.AddName.getFieldsValue();
-        axios({
-            url: `${configJson.prefix}/companies`,
-            method: 'post',
-            data: addName,
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response.data);
-                message.success(messageJson[`add manufacture success`]);
-                that.setState({
-                    addModal:false
-                })
-                that.fetchHwData(page, q);
-            }).catch(function (error) {
-            console.log('获取出错', error);
-            converErrorCodeToMsg(error)
-        })
+        this.props.history.push(`${this.props.match.url}/new`)
+        // axios({
+        //     url: `${configJson.prefix}/companies`,
+        //     method: 'post',
+        //     data: addName,
+        //     headers: getHeader()
+        // })
+        //     .then(function (response) {
+        //         console.log(response.data);
+        //         message.success(messageJson[`add manufacture success`]);
+        //         that.setState({
+        //             addModal:false
+        //         })
+        //         that.fetchHwData(page, q);
+        //     }).catch(function (error) {
+        //     console.log('获取出错', error);
+        //     converErrorCodeToMsg(error)
+        // })
     }
     editData=()=>{
         const editName = this.refs.EditName.getFieldsValue();
@@ -142,7 +143,7 @@ class Manufacture extends Component {
         },  {
             title: '操作',
             key: 'action',
-            width: this.props.responsive.isMobile?75:150,
+            width: this.props.responsive.isMobile?75:180,
             render: (text, record, index) => {
                 return (
                     <div key={index}>
@@ -150,7 +151,7 @@ class Manufacture extends Component {
                             to={{
                                 pathname:`${this.props.match.url}/${record.id}`,
                             }}
-                        ><Button  type="primary">详情</Button></Link>
+                        ><Button  type="primary">详情/修改</Button></Link>
                         {this.props.responsive.isMobile?null: <span className="ant-divider"/>}
                         <Popconfirm placement="topRight" title={ `确定要删除吗?`}
                                     onConfirm={this.delData.bind(this, record.id)}>
@@ -173,11 +174,7 @@ class Manufacture extends Component {
                     </Breadcrumb>
                     <div className="operate-box">
                         <SearchWrap onChangeSearch={this.onChangeSearch} {...this.state} {...this.props}/>
-                        <Link
-                            to={{
-                                pathname:`${this.props.match.url}/new`,
-                            }}
-                        ><Button  type="primary">添加产品</Button></Link>
+                        <Button  type="primary" onClick={()=>this.setState({addModal:true})}>添加产品</Button>
                     </div>
                     <Table bordered className="category-table"
                            loading={this.state.loading}
@@ -205,7 +202,7 @@ class Manufacture extends Component {
                 <Modal
                     key={ Date.parse(new Date())}
                     visible={this.state.addModal}
-                    title="添加制造厂商"
+                    title="添加产品"
                     onCancel={()=> {
                         this.setState({addModal: false})
                     }}
@@ -219,27 +216,7 @@ class Manufacture extends Component {
                         </Button>,
                     ]}
                 >
-                    <AddOrEditName  ref="AddName"/>
-                </Modal>
-                <Modal
-                    key={ Date.parse(new Date()) + 1}
-                    visible={this.state.editModal}
-                    title="修改制造厂商"
-                    onCancel={()=> {
-                        this.setState({editModal: false})
-                    }}
-                    footer={[
-                        <Button key="back" type="ghost" size="large"
-                                onClick={()=> {
-                                    this.setState({editModal: false})
-                                }}>取消</Button>,
-                        <Button key="submit" type="primary" size="large" onClick={this.editData}>
-                            保存
-                        </Button>,
-                    ]}
-                >
-                    <AddOrEditName  ref="EditName"
-                                    isEdit={true} editRecord={this.state.editRecord}/>
+                    <AddName  ref="AddName"/>
                 </Modal>
             </div>
         )
