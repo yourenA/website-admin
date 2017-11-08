@@ -32,7 +32,6 @@ class Data extends React.Component {
                                         <h2>访问量统计</h2>
                                         <small>总浏览数: <b>15200</b></small>
                                     </div>
-                                    <a className="card-sync"><Icon type="sync" /></a>
                                     <Count />
                                 </Card>
                             </div>
@@ -44,7 +43,6 @@ class Data extends React.Component {
                                         <h2>访问设备统计</h2>
                                         <small></small>
                                     </div>
-                                    <a className="card-sync"><Icon type="sync" /></a>
                                     <Proportion />
                                 </Card>
                             </div>
@@ -56,7 +54,6 @@ class Data extends React.Component {
                                         <h2>访问者地域分布</h2>
                                         <small></small>
                                     </div>
-                                    <a className="card-sync"><Icon type="sync" /></a>
                                     <City />
                                 </Card>
                             </div>
@@ -68,7 +65,6 @@ class Data extends React.Component {
                                     <h2>访问详情</h2>
                                     <small></small>
                                 </div>
-                                <a className="card-sync"><Icon type="sync" /></a>
                                 <Detail />
                             </Card>
                         </div>

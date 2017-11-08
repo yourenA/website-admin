@@ -24,6 +24,7 @@ class AddOrEditNameForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            imageUrl:this.props.isEdit ? this.props.editRecord.image : '',
         };
     }
 
@@ -36,6 +37,12 @@ class AddOrEditNameForm extends React.Component {
             // Get this url from response in real world.
             getBase64(info.file.originFileObj, imageUrl => this.setState({ imageUrl }));
         }
+    }
+    normFile = (e) => {
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
     }
     render() {
         const formItemLayout = {
@@ -76,15 +83,15 @@ class AddOrEditNameForm extends React.Component {
                                 })(
                                     <Upload
                                         className="banner-uploader"
-                                        name="avatar"
+                                        name="profile"
                                         showUploadList={false}
-                                        action="http//jsonplaceholder.typicode.com/posts/"
+                                        action="http://localhost:3000/profile"
                                         beforeUpload={beforeUpload}
                                         onChange={this.handleChange}
                                     >
                                         {
-                                            this.props.isEdit ?
-                                                <img src={this.props.editRecord.image} alt="" className="banner" /> :
+                                            this.state.imageUrl ?
+                                                <img src={this.state.imageUrl} alt="" className="banner category" /> :
                                                 <Icon type="plus" className="banner-uploader-trigger" />
                                         }
                                     </Upload>

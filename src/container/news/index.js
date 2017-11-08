@@ -35,10 +35,10 @@ class Manufacture extends Component {
     }
 
     componentDidMount() {
-        this.fetchHwData();
+        this.getInfo();
     }
 
-    fetchHwData = (page = 1, q = '') => {
+    getInfo = (page = 1, q = '') => {
         const that = this;
                 that.setState({
                     loading: false,
@@ -49,66 +49,28 @@ class Manufacture extends Component {
                         {date:"2017-10-16 10:40:50",image:'http://f12.baidu.com/it/u=1505322598,1727959990&fm=72',desc:'这是简要新闻，包含一张图片，描述文字字数限制在140以内'},]
                 })
     }
-    addData = ()=> {
-        const that = this;
-        const {page, q}=this.state;
-        const addName = this.refs.AddName.getFieldsValue();
-        axios({
-            url: `${configJson.prefix}/companies`,
-            method: 'post',
-            data: addName,
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response.data);
-                message.success(messageJson[`add manufacture success`]);
-                that.setState({
-                    addModal:false
-                })
-                that.fetchHwData(page, q);
-            }).catch(function (error) {
-            console.log('获取出错', error);
-            converErrorCodeToMsg(error)
-        })
-    }
     editData=()=>{
         const editName = this.refs.EditName.getFieldsValue();
-        const that = this;
-        const {page, q}=this.state;
-        axios({
-            url: `${configJson.prefix}/companies/${this.state.editId}`,
-            method: 'put',
-            params: editName,
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response.data);
-                message.success(messageJson[`edit manufacture success`]);
-                that.setState({
-                    editModal:false
-                });
-                that.fetchHwData(page, q);
-            }).catch(function (error) {
-            console.log('获取出错', error);
-            converErrorCodeToMsg(error)
-        })
+        console.log("addName",editName);
+        document.querySelector('.banner')?console.log(document.querySelector('.banner').src):null
     }
     delData = (id)=> {
         const that = this;
         const {page, q}=this.state;
-        axios({
-            url: `${configJson.prefix}/companies/${id}`,
-            method: 'delete',
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response.data);
-                message.success(messageJson[`del manufacture success`]);
-                that.fetchHwData(page, q);
-            }).catch(function (error) {
-            console.log('获取出错', error);
-            converErrorCodeToMsg(error)
-        })
+        console.log(id)
+        // axios({
+        //     url: `${configJson.prefix}/companies/${id}`,
+        //     method: 'delete',
+        //     headers: getHeader()
+        // })
+        //     .then(function (response) {
+        //         console.log(response.data);
+        //         message.success(messageJson[`del manufacture success`]);
+        //         that.fetchHwData(page, q);
+        //     }).catch(function (error) {
+        //     console.log('获取出错', error);
+        //     converErrorCodeToMsg(error)
+        // })
     }
 
     onChangeSearch = (page, q,)=> {
@@ -141,7 +103,8 @@ class Manufacture extends Component {
                         <div className="image"><img src={item.image} alt="" onClick={()=>that.openGallery(item.image)}/></div>
                         <div className="edit-icon">
                             <Icon type="edit" onClick={()=>that.setState({editRecord:item,editModal:true})}/>
-                            <Popconfirm placement="bottomRight" title={ `确定要删除吗?`}>
+                            <Popconfirm placement="bottomRight" title={ `确定要删除吗?`}
+                                        onConfirm={that.delData.bind(that, item.id)}>
                                 <Icon type="delete" />
                             </Popconfirm>
                         </div>

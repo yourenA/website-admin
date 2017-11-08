@@ -17,7 +17,7 @@ export function checkLogin() {
         const username = localStorage.getItem('username') || sessionStorage.getItem('username');
         const token = localStorage.getItem('usertoken') || sessionStorage.getItem('usertoken');
         const permissions = localStorage.getItem('permissions') || sessionStorage.getItem('permissions');
-        if (username && token) {
+        if (username) {
             dispatch({
                 type: LOGIN_SUCCESS,
                 username: username,
@@ -31,8 +31,20 @@ export function checkLogin() {
     }
 }
 export function login(user, from, history) {
+    console.log(user)
     return dispatch => {
-        axios.post(`${configJson.prefix}/login`, {
+        if(user.userName==='system'&&user.password==='123456'){
+            localStorage.setItem('username', user.username);
+            if(user.remember){
+                localStorage.setItem('username', user.username);
+            }
+            setTimeout(function () {
+                window.location.replace("/layout/")
+            },3000)
+        }
+
+
+   /*     axios.post(`${configJson.prefix}/login`, {
             username: user.username,
             password: user.password
         })
@@ -62,13 +74,16 @@ export function login(user, from, history) {
                 } else {
                     message.error(messageJson['unknown error']);
                 }
-            });
+            });*/
     }
 }
 
 export function signout(history) {
     console.log("执行退出");
     return dispatch => {
+        removeLoginStorage();
+        window.location.replace("/login")
+    /*    removeLoginStorage();
         axios({
             url: `${configJson.prefix}/logout`,
             method: 'post',
@@ -89,7 +104,7 @@ export function signout(history) {
                     type: SIGNOUT_FAIL,
                 });
                 // history.replace('/login')
-            });
+            });*/
     }
 }
 

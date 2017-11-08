@@ -24,9 +24,10 @@ class SiderCustom extends Component {
     }
     setMenuOpen = props => {
         const {pathname} = props;
+        console.log('pathname',pathname)
         this.setState({
             // openKey: pathname.substr(0, pathname.lastIndexOf('/')),
-            selectedKey: '/'+pathname.split('/')[1]
+            selectedKey: '/layout/'+pathname.split('/')[2]
         },function () {
         });
     };
@@ -72,20 +73,20 @@ class SiderCustom extends Component {
                     openKeys={this.state.firstHide ? null : [this.state.openKey]}
                     onOpenChange={this.openMenu}
                 >
-                    <Menu.Item key="/">
-                        <Link to={'/'}><Icon type="mobile" /><span className="nav-text">首页</span></Link>
+                    <Menu.Item key="/layout/">
+                        <Link to={'/layout/'}><Icon type="mobile" /><span className="nav-text">首页</span></Link>
                     </Menu.Item>
-                    <Menu.Item key="/config">
-                        <Link to={'/config'}><Icon type="scan" /><span className="nav-text">网站基本配置</span></Link>
+                    <Menu.Item key="/layout/config">
+                        <Link to={'/layout/config'}><Icon type="scan" /><span className="nav-text">网站基本配置</span></Link>
                     </Menu.Item>
-                    <Menu.Item key="/products">
-                        <Link to={'/products'}><Icon type="edit" /><span className="nav-text">产品与服务</span></Link>
+                    <Menu.Item key="/layout/products">
+                        <Link to={'/layout/products'}><Icon type="edit" /><span className="nav-text">产品与服务</span></Link>
                     </Menu.Item>
-                    <Menu.Item key="/news">
-                        <Link to={'/news'}><Icon type="rocket" /><span className="nav-text">公司简闻</span></Link>
+                    <Menu.Item key="/layout/news">
+                        <Link to={'/layout/news'}><Icon type="rocket" /><span className="nav-text">公司简闻</span></Link>
                     </Menu.Item>
-                    <Menu.Item key="/data">
-                        <Link to={'/data'}><Icon type="line-chart" /><span className="nav-text">网站访问数据</span></Link>
+                    <Menu.Item key="/layout/data">
+                        <Link to={'/layout/data'}><Icon type="line-chart" /><span className="nav-text">网站访问数据</span></Link>
                     </Menu.Item>
                 {/*    <SubMenu
                  key="/app/ui"

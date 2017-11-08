@@ -18,9 +18,9 @@ class Partner extends Component {
         };
     }
     componentDidMount() {
-        this.fetchData();
+        this.getInfo();
     }
-    fetchData = (page = 1, q = '') => {
+    getInfo = (page = 1, q = '') => {
         const that=this;
             that.setState({
                 meta: {pagination: {total: 2, per_page: 10}},
@@ -28,8 +28,30 @@ class Partner extends Component {
             })
 
     }
-    delData=()=>{
-
+    addData=()=>{
+        const addName = this.refs.AddName.getFieldsValue();
+        let postData={name:addName.name};
+        if(addName.residence.length===1){
+            postData.city=addName.residence[0]
+        }else if(addName.residence.length===2){
+            postData.province=addName.residence[0]
+            postData.city=addName.residence[1]
+        }
+        console.log("postData",postData)
+    }
+    editData=()=>{
+        const editName = this.refs.EditName.getFieldsValue();
+        let postData={name:editName.name};
+        if(editName.residence.length===1){
+            postData.city=editName.residence[0]
+        }else if(editName.residence.length===2){
+            postData.province=editName.residence[0]
+            postData.city=editName.residence[1]
+        }
+        console.log("postData",postData)
+    }
+    delData=(id)=>{
+        console.log(id)
     }
     render() {
         const {data, page, meta} = this.state;

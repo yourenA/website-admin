@@ -40,14 +40,23 @@ class DynamicFieldSet extends React.Component {
     }
 
     handleSubmit = (e) => {
-        e.preventDefault();
+        e?e.preventDefault():null;
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                let topic=[]
+                for (let k in values) {
+                    if (k.indexOf('topics') >= 0) {
+                        topic.push({name:values[k].name,url:values[k].url})
+                    }
+                }
+                console.log("topic",topic)
             }
         });
     }
-
+    reset=()=>{
+        this.props.form.resetFields();
+        this.handleSubmit()
+    }
     render() {
         const {getFieldDecorator, getFieldValue} = this.props.form;
         const formItemLayoutWithOutLabel = {
@@ -84,7 +93,7 @@ class DynamicFieldSet extends React.Component {
                     </Button>
                 </FormItem>
                 <div className="edit-btn">
-                    <Button >重置</Button>
+                    <Button onClick={this.reset}>重置</Button>
                     <Button type="primary" htmlType="submit">确定</Button>
                 </div>
             </Form>
@@ -138,7 +147,7 @@ class ThemeInput extends React.Component {
         return (
         <Row gutter={16}>
             <Col className="gutter-row deletePadding" span={3}>
-                <div className="gutter-box"> 名称:</div>
+                <div className="gutter-box float-right"> 名称:</div>
             </Col>
             <Col className="gutter-row" span={8}>
                 <div className="gutter-box">
@@ -149,10 +158,10 @@ class ThemeInput extends React.Component {
                     />
                 </div>
             </Col>
-            <Col className="gutter-row" span={1}>
-                <div className="gutter-box"> url:</div>
+            <Col className="gutter-row deletePadding" span={2}>
+                <div className="gutter-box  float-right"> url:</div>
             </Col>
-            <Col className="gutter-row" span={8}>
+            <Col className="gutter-row" span={7}>
                 <div className="gutter-box">
                     <Input
                         type="text"

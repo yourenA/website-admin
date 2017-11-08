@@ -40,10 +40,10 @@ class Manufacture extends Component {
     }
 
     componentDidMount() {
-        this.fetchHwData();
+        this.getInfo();
     }
 
-    fetchHwData = (page = 1, q = '') => {
+    getInfo = (page = 1, q = '') => {
         const that = this;
                 that.setState({
                     loading: false,
@@ -64,6 +64,7 @@ class Manufacture extends Component {
         const that = this;
         const {page, q}=this.state;
         const addName = this.refs.AddName.getFieldsValue();
+        console.log(addName)
         this.props.history.push(`${this.props.match.url}/new`)
         // axios({
         //     url: `${configJson.prefix}/companies`,
@@ -83,44 +84,23 @@ class Manufacture extends Component {
         //     converErrorCodeToMsg(error)
         // })
     }
-    editData=()=>{
-        const editName = this.refs.EditName.getFieldsValue();
-        const that = this;
-        const {page, q}=this.state;
-        axios({
-            url: `${configJson.prefix}/companies/${this.state.editId}`,
-            method: 'put',
-            params: editName,
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response.data);
-                message.success(messageJson[`edit manufacture success`]);
-                that.setState({
-                    editModal:false
-                });
-                that.fetchHwData(page, q);
-            }).catch(function (error) {
-            console.log('获取出错', error);
-            converErrorCodeToMsg(error)
-        })
-    }
     delData = (id)=> {
         const that = this;
         const {page, q}=this.state;
-        axios({
-            url: `${configJson.prefix}/companies/${id}`,
-            method: 'delete',
-            headers: getHeader()
-        })
-            .then(function (response) {
-                console.log(response.data);
-                message.success(messageJson[`del manufacture success`]);
-                that.fetchHwData(page, q);
-            }).catch(function (error) {
-            console.log('获取出错', error);
-            converErrorCodeToMsg(error)
-        })
+        console.log(id)
+        // axios({
+        //     url: `${configJson.prefix}/companies/${id}`,
+        //     method: 'delete',
+        //     headers: getHeader()
+        // })
+        //     .then(function (response) {
+        //         console.log(response.data);
+        //         message.success(messageJson[`del manufacture success`]);
+        //         that.fetchHwData(page, q);
+        //     }).catch(function (error) {
+        //     console.log('获取出错', error);
+        //     converErrorCodeToMsg(error)
+        // })
     }
 
     onChangeSearch = (page, q,)=> {

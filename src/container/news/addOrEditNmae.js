@@ -11,20 +11,23 @@ function getBase64(img, callback) {
 }
 
 function beforeUpload(file) {
-    console.log(file)
-    const isJPG = file.type .indexOf('image');
-    const isLt10KB = file.size / 1024  < 10;
-    if (!isLt10KB) {
-        message.error('Image must smaller than 10kb!');
+    const isImage = file.type.indexOf('image')>=0 ;
+    if (!isImage) {
+        message.error('必须上传图片');
     }
-    return isJPG && isLt10KB;
+    const isLt2M = file.size / 1024 / 1024 < 1;
+    if (!isLt2M) {
+        message.error('图片大小必须小于 1MB!');
+    }
+    return isImage && isLt2M;
 }
+
 
 class AddOrEditNameForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            imageUrl:this.props.isEdit ?this.props.editRecord.image:null
+            imageUrl:this.props.isEdit ? this.props.editRecord.image : '',
         };
     }
 
@@ -32,11 +35,16 @@ class AddOrEditNameForm extends React.Component {
 
     }
     handleChange = (info) => {
-        console.log(info)
         if (info.file.status === 'done') {
             // Get this url from response in real world.
             getBase64(info.file.originFileObj, imageUrl => this.setState({ imageUrl }));
         }
+    }
+    normFile = (e) => {
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
     }
     render() {
         const formItemLayout = {
@@ -64,15 +72,15 @@ class AddOrEditNameForm extends React.Component {
                                 })(
                                     <Upload
                                         className="banner-uploader"
-                                        name="avatar"
+                                        name="profile"
                                         showUploadList={false}
-                                        action="http//jsonplaceholder.typicode.com/posts/"
+                                        action="http://localhost:3000/profile"
                                         beforeUpload={beforeUpload}
                                         onChange={this.handleChange}
                                     >
                                         {
-                                             this.props.isEdit ?
-                                                <img src={this.state.imageUrl} alt="" className="banner" /> :
+                                            this.state.imageUrl ?
+                                                <img src={this.state.imageUrl} alt="" className="banner" style={{maxWidth:this.props.isEdit ?'100%':'50%'}} /> :
                                                 <Icon type="plus" className="banner-uploader-trigger" />
                                         }
                                     </Upload>

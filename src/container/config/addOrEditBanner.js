@@ -26,7 +26,7 @@ class AddOrEditNameForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            imageUrl:this.props.editRecord.imageUrl
+            imageUrl:this.props.isEdit ? this.props.editRecord.imageUrl : '',
         };
     }
 
@@ -53,7 +53,7 @@ class AddOrEditNameForm extends React.Component {
         };
         const {getFieldDecorator} = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit} className="login-form">
+            <Form onSubmit={this.handleSubmit} >
                     <div>
                         <FormItem
                             label={'标题'}
@@ -100,7 +100,7 @@ class AddOrEditNameForm extends React.Component {
                                         onChange={this.handleChange}
                                     >
                                         {
-                                             this.props.isEdit ?
+                                             this.state.imageUrl ?
                                                 <img src={this.state.imageUrl} alt="" className="banner" /> :
                                                 <Icon type="plus" className="banner-uploader-trigger" />
                                         }

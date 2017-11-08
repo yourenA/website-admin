@@ -3,7 +3,8 @@
  */
 import React, {Component} from 'react';
 import {Table,Popconfirm,Pagination,Button,Modal} from 'antd';
-class Partner extends Component {
+import SearchWrap from './search'
+class Detail extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -58,6 +59,9 @@ class Partner extends Component {
 
         return (
             <div>
+                <div className="operate-box">
+                    <SearchWrap />
+                </div>
                 <Table bordered
                        rowKey="id" columns={columns}
                        dataSource={data} pagination={false}/>
@@ -69,4 +73,4 @@ class Partner extends Component {
     }
 }
 
-export default Partner;
+export default Detail;

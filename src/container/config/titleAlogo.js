@@ -29,12 +29,26 @@ function beforeUpload(file) {
 class Demo extends React.Component {
     state = {};
     componentDidMount = ()=> {
+
         this.setState({
-            imageUrl:'http://localhost:3000/my-uploads/1509084144559-3 (1).jpg'
+
         })
+        this.getInfo()
+    }
+    getInfo=()=>{
+        const that=this;
+        console.log('getInfo');
+        setTimeout(function () {
+            that.setState({
+                imageUrl:'http://localhost:3000/my-uploads/1509084144559-3 (1).jpg',
+                title:'广州辂轺信息科技有限公司',
+                desc:'desc',
+                copyright:'copyright'
+            })
+        },2000)
+
     }
     handleChange = (info) => {
-        //
         if (info.file.status === 'done') {
             console.log("info.file.originFileObj",info.file.originFileObj)
             // Get this url from response in real world.
@@ -43,6 +57,12 @@ class Demo extends React.Component {
     }
     reset=()=>{
         this.props.form.resetFields();
+        this.handleSubmit()
+        // this.props.form.setFieldsValue({
+        //     title:this.state.title,
+        //     desc:this.state.desc,
+        //     copyright:this.state.copyright
+        // })
     }
     normFile = (e) => {
         if (Array.isArray(e)) {
@@ -51,13 +71,18 @@ class Demo extends React.Component {
         return e && e.fileList;
     }
     handleSubmit = (e) => {
-        e.preventDefault();
+        e?e.preventDefault():null;
         const that=this
         console.log(that.state.imageUrl)
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                axios({
+                // this.setState({
+                //     title:values.title,
+                //     desc:values.desc,
+                //     copyright:values.copyright
+                // })
+              /*  axios({
                     url: `http://localhost:3000/users`,
                     method: 'POST',
                     data:values
@@ -67,7 +92,7 @@ class Demo extends React.Component {
                         console.log(response.data)
                     }).catch(function (error) {
                     console.log('获取出错', error);
-                })
+                })*/
             }
         });
     }
@@ -111,7 +136,7 @@ class Demo extends React.Component {
                         label="公司名称"
                         {...formItemLayout}>
                         {getFieldDecorator('title', {
-                            initialValue:  '广州辂轺信息科技有限公司',
+                            initialValue:this.state.title,
                         })(
                             <Input/>
                         )}
@@ -121,7 +146,7 @@ class Demo extends React.Component {
                         label="公司描述"
                         {...formItemLayout}>
                         {getFieldDecorator('desc', {
-                            initialValue:  '广州辂轺信息科技2013年成立于广州,是一家专注于汽车ECU（电子控制单元）产品开发的科技企业。 依托于自行开发的AUTOSAR汽车软件架构和OSEK实时操作系统，凭借自身多年的技术积累，为广大客户提供各种ECU解决方案和产品。',
+                            initialValue: this.state.desc,
                         })(
                             <Input type="textarea" rows={6} />
                         )}
@@ -130,7 +155,7 @@ class Demo extends React.Component {
                         label="版权信息"
                         {...formItemLayout}>
                         {getFieldDecorator('copyright', {
-                            initialValue:  '© 2014-2017 广州辂轺信息科技有限公司 版权所有',
+                            initialValue: this.state.copyright,
                         })(
                             <Input  />
                         )}

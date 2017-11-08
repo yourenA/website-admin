@@ -40,24 +40,26 @@ class DynamicFieldSet extends React.Component {
     }
 
     handleSubmit = (e) => {
-        e.preventDefault();
+       e? e.preventDefault():null;
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                let topic=[]
+                for (let k in values) {
+                    if (k.indexOf('topics') >= 0) {
+                        topic.push({theme:values[k].theme,icon:values[k].icon})
+                    }
+                }
+                console.log("topic",topic)
             }
         });
     }
-
-    render() {
+    reset=()=>{
+        this.props.form.resetFields();
+        this.handleSubmit()
+    }
+    renderList=()=>{
         const {getFieldDecorator, getFieldValue} = this.props.form;
-        const formItemLayoutWithOutLabel = {
-            wrapperCol: {
-                xs: {span: 24, offset: 0},
-                sm: {span: 18, offset: 6},
-            },
-        };
         const keysArr=[];
-        const advantageLen=this.props.advantage.length;
         for(let k in this.props.advantage){
             keysArr.push(parseInt(k))
         }
@@ -76,16 +78,25 @@ class DynamicFieldSet extends React.Component {
 
             );
         });
+        return formItems
+    }
+    render() {
+        const formItemLayoutWithOutLabel = {
+            wrapperCol: {
+                xs: {span: 24, offset: 0},
+                sm: {span: 18, offset: 6},
+            },
+        };
         return (
             <Form onSubmit={this.handleSubmit}>
-                {formItems}
+                {this.renderList()}
                 <FormItem {...formItemLayoutWithOutLabel}>
                     <Button type="dashed" onClick={this.add} style={{width: '60%'}}>
                         <Icon type="plus"/> 添加字段
                     </Button>
                 </FormItem>
                 <div className="edit-btn">
-                    <Button >重置</Button>
+                    <Button onClick={this.reset}>重置</Button>
                     <Button type="primary" htmlType="submit">确定</Button>
                 </div>
             </Form>
@@ -139,7 +150,7 @@ class ThemeInput extends React.Component {
         return (
         <Row gutter={16}>
             <Col className="gutter-row deletePadding" span={3}>
-                <div className="gutter-box"> 描述:</div>
+                <div className="gutter-box  float-right"> 描述:</div>
             </Col>
             <Col className="gutter-row" span={8}>
                 <div className="gutter-box">
@@ -150,10 +161,10 @@ class ThemeInput extends React.Component {
                     />
                 </div>
             </Col>
-            <Col className="gutter-row" span={2}>
-                <div className="gutter-box"> ICON:</div>
+            <Col className="gutter-row deletePadding" span={3}>
+                <div className="gutter-box  float-right"> ICON:</div>
             </Col>
-            <Col className="gutter-row" span={8}>
+            <Col className="gutter-row" span={7}>
                 <div className="gutter-box">
                     <Input
                         type="text"

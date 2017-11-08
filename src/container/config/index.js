@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React from 'react'
-import { Row, Col, Card, Timeline, Icon } from 'antd';
+import { Row, Col, Card, Timeline, Alert } from 'antd';
 import Masonry from 'react-masonry-component';
 import TitleALogo from './titleAlogo'
 import Advantage from './advantage'
@@ -19,7 +19,7 @@ class TitleAndLogo extends React.Component {
         this.state = {
             advantage:[{theme:'我们的优势',icon:'taxi'},{theme:'我们的优势',icon:'paper-plane-o'},{theme:'我们的优势',icon:'bolt'}],
             friendshipLink:[{name:'xxxx公司',url:'http://baidu.com'},{name:'xxxx公司',url:'http://baidu.com'},],
-            partner:[{id:1,name:'xxxx公司',city:'广州'},{id:2,name:'xxxx公司',city:'北京'},],
+
         };
     }
 
@@ -30,6 +30,8 @@ class TitleAndLogo extends React.Component {
         return (
             <div className="content config">
                 <Row >
+                    <Alert message="当配置项下方有'确定'按钮时，需要点击'确定'按钮才能保存数据。点击'重置'按钮时，会将当前配置项数据回退到进入页面时的状态" type="info" closable
+                           style={{marginTop: '10px', marginBottom: '10px'}}/>
                     <Masonry
                         className={'my-gallery-class'} // default ''
                         options={masonryOptions} // default {}
@@ -43,7 +45,6 @@ class TitleAndLogo extends React.Component {
                                         <h2>网站基本信息</h2>
                                         <small></small>
                                     </div>
-                                    <a className="card-sync"><Icon type="sync" /></a>
                                     <TitleALogo />
                                 </Card>
                             </div>
@@ -86,7 +87,6 @@ class TitleAndLogo extends React.Component {
                                         <small>该模块的ICON采用'Font Awesome'图标，在ICON字段中填入相关的'Font Awesome'图标名称，如'address-book'。注意不用填写前缀'fa-'。详情
                                             <a href="http://www.fontawesome.com.cn/faicons/">http://www.fontawesome.com.cn/faicons/</a></small>
                                     </div>
-                                    <a className="card-sync"><Icon type="sync" /></a>
                                     <Advantage advantage={this.state.advantage}/>
                                 </Card>
                             </div>

@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import {Form, Input, Icon, Upload,message,Button} from 'antd';
+import pc1 from './../../images/3.jpg'
 const FormItem = Form.Item;
 function getBase64(img, callback) {
     const reader = new FileReader();
@@ -23,13 +24,24 @@ function beforeUpload(file) {
 class AddOrEditNameForm extends React.Component {
     constructor(props) {
         super(props);
+        this.originImageUrl='';
         this.state = {
-            imageUrl:this.props.imageUrl
+            imageUrl:'',
+            name:''
         };
     }
 
     componentDidMount() {
+        this.getInfo();
 
+    }
+    getInfo=()=>{
+        this.setState({
+            name:'产品一',
+            imageUrl:pc1
+        },function () {
+            this.originImageUrl=this.state.imageUrl
+        })
     }
     handleChange = (info) => {
         console.log(info)
@@ -37,6 +49,49 @@ class AddOrEditNameForm extends React.Component {
             // Get this url from response in real world.
             getBase64(info.file.originFileObj, imageUrl => this.setState({ imageUrl }));
         }
+    }
+    reset=()=>{
+        this.props.form.resetFields();
+        this.setState({
+            imageUrl:this.originImageUrl
+        },function () {
+            this.handleSubmit()
+        })
+
+    }
+    normFile = (e) => {
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
+    }
+    handleSubmit = (e) => {
+        e?e.preventDefault():null
+        const that=this
+        console.log(that.state.imageUrl)
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('Received values of form: ', values);
+                console.log('imageUrl',this.state.imageUrl)
+                /*this.setState({
+                 address:values.address,
+                 phone:values.phone,
+                 fax:values.fax,
+                 email:values.email
+                 })*/
+                /*  axios({
+                 url: `http://localhost:3000/users`,
+                 method: 'POST',
+                 data:values
+                 })
+                 .then(function (response) {
+
+                 console.log(response.data)
+                 }).catch(function (error) {
+                 console.log('获取出错', error);
+                 })*/
+            }
+        });
     }
     render() {
         const formItemLayout = {
@@ -51,7 +106,7 @@ class AddOrEditNameForm extends React.Component {
                             label={'产品名称'}
                             {...formItemLayout}>
                             {getFieldDecorator('name', {
-                                initialValue: this.props.isEdit ? this.props.editRecord.title : '',
+                                initialValue: this.state.name,
                             })(
                                 <Input  />
                             )}
@@ -67,9 +122,9 @@ class AddOrEditNameForm extends React.Component {
                                 })(
                                     <Upload
                                         className="banner-uploader"
-                                        name="avatar"
+                                        name="profile"
                                         showUploadList={false}
-                                        action="http//jsonplaceholder.typicode.com/posts/"
+                                        action="http://localhost:3000/profile"
                                         beforeUpload={beforeUpload}
                                         onChange={this.handleChange}
                                     >
@@ -83,7 +138,7 @@ class AddOrEditNameForm extends React.Component {
                             </div>
                         </FormItem>
                         <div className="edit-btn">
-                            <Button >重置</Button>
+                            <Button onClick={this.reset}>重置</Button>
                             <Button type="primary" htmlType="submit">确定</Button>
                         </div>
                     </div>

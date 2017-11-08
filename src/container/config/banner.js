@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React ,{Component} from 'react'
-import {Button, message, Icon, Upload, Input, Form,Popconfirm,Modal} from 'antd';
+import {Button, message, Alert, Upload, Tooltip, Form,Popconfirm,Modal} from 'antd';
 import {sortable} from 'react-sortable';
 import pc1 from './../../images/1.jpg'
 import pc2 from './../../images/2.jpg'
@@ -43,7 +43,7 @@ class Demo extends React.Component {
         this.setState({
             draggingIndex: null,
             imageUrl:'/pc1.jpg',
-            data:[{imageUrl:pc1,title:'辂轺科技',desc:'专注于汽车电子控制单元产品开发',url:'/'},{imageUrl:pc2,title:'辂轺产品',desc:'专注于汽车电子控制单',url:'/products'},{imageUrl:pc3,title:'辂轺科技3',desc:'专注于汽车电专注于汽车电子控制单元产品开发',url:'/news'}]
+            data:[{id:0,imageUrl:pc1,title:'辂轺科技',desc:'专注于汽车电子控制单元产品开发',url:'/'},{id:1,imageUrl:pc2,title:'辂轺产品',desc:'专注于汽车电子控制单',url:'/products'},{id:2,imageUrl:pc3,title:'辂轺科技3',desc:'专注于汽车电专注于汽车电子控制单元产品开发',url:'/news'}]
         })
     }
     handleChange = (info) => {
@@ -56,18 +56,28 @@ class Demo extends React.Component {
         this.setState(obj,function () {
             if(obj.draggingIndex == null){
                 console.log(this.state.data)
-                console.log('提交更改')
+                let sortArr=this.state.data.map(function (item,index) {
+                    return item.id
+                })
+                console.log('sortArr',sortArr)
             }
         });
     }
+    addData=()=>{
+        const addName = this.refs.AddName.getFieldsValue();
+        console.log("addName",addName);
+        document.querySelector('.banner')?console.log(document.querySelector('.banner').src):null
+    }
+    editData=()=>{
+        const editName = this.refs.EditName.getFieldsValue();
+        console.log("addName",editName);
+        document.querySelector('.banner')?console.log(document.querySelector('.banner').src):null
+    }
+    delData=(id)=>{
+        console.log(id)
+    }
     render() {
-        const {getFieldDecorator} = this.props.form;
-        const formItemLayout = {
-            labelCol: {span: 5},
-            wrapperCol: {span: 19},
-        };
         const that=this;
-        const imageUrl = this.state.imageUrl;
         const data=this.state.data;
         const renderdetailList = data.map(function (item, index) {
             return (
@@ -81,7 +91,10 @@ class Demo extends React.Component {
                 >
                     <div className="banner-table-row">
                         <div className="banner-table-cell">{item.title}</div>
-                        <div className="banner-table-cell">{item.desc}</div>
+                        <div className="banner-table-cell">
+                            <Tooltip title={item.desc}>
+                                {item.desc.length>10?item.desc.substring(0,10)+'...':item.desc}
+                            </Tooltip></div>
                         <div className="banner-table-cell">{item.url}</div>
                         <div className="banner-table-cell"><img src={item.imageUrl} alt=""/></div>
                         <div className="banner-table-cell">
@@ -89,7 +102,7 @@ class Demo extends React.Component {
                                 that.setState({editId: item.id, editModal: true, editRecord: item})
                             }}>编辑</Button>
                             <Popconfirm placement="topRight" title={ `确定要删除吗?`}
-                                        >
+                                        onConfirm={that.delData.bind(that, item.id)}>
                                 <Button style={{marginTop:'5px'}} type='danger'>
                                     删除
                                 </Button>
@@ -101,6 +114,8 @@ class Demo extends React.Component {
         })
         return (
             <div>
+                <Alert message="拖动每一个行可以改变顺序" type="info" closable
+                       style={{marginTop: '10px', marginBottom: '10px'}}/>
                 <Button type="primary" icon="plus" style={{marginBottom:'10px'}} onClick={()=>{this.setState({addModal:true})}}>添加</Button>
                 <div className="banner-wrap">
                     {/*<Form >

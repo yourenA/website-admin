@@ -4,6 +4,10 @@
 .banner-table-row{
   display: flex;
   width: 100%;
+  transition:all 0.3s;
+  &:hover{
+    background: #edf8f5;
+  }
   .banner-table-cell{
     vertical-align: middle;
     padding: 10px 8px;
@@ -22,7 +26,6 @@
       width: 20%
     }
     &:nth-child(3){
-      flex: 1;
       width: 20%;
     }
     &:nth-child(4){
@@ -36,4 +39,5 @@
 }
 .banner-table-row-header{
   color: rgba(0, 0, 0, 0.85);
+  background: #f7f7f7;
 }

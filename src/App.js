@@ -3,7 +3,7 @@ import { Layout, Menu, Icon,  Badge, Popover } from 'antd';
 import {
     BrowserRouter as Router,
     Route,
-
+    Redirect
 } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory'
 
@@ -14,42 +14,13 @@ import {connect} from 'react-redux';
 import * as loginAction from './actions/login';
 import * as responsiveAction from './actions/responsive';
 import {testPermission} from './common/common'
-import SiderCustom from './components/SiderCustom';
-import HeaderCustom from './components/HeaderCustom';
 import asyncComponent from './AsyncComponent'
-// import Nopermission from './container/nopermission';
-// import Login from './container/login';
-// import Home from './container/home';
+import MyLayout from './Layout';
 
-// import About from './container/about'
-// import HardwareTest from './container/hardwareTest/index';
-
-
-const Home = asyncComponent(() =>
-import(/* webpackChunkName: "home" */ "./container/home/home")
-)
-const Config = asyncComponent(() =>
-import(/* webpackChunkName: "Config" */ "./container/config/index")
-)
-const Category = asyncComponent(() =>
-import(/* webpackChunkName: "Category" */ "./container/category/index")
-)
-const Products = asyncComponent(() =>
-import(/* webpackChunkName: "Products" */ "./container/products/index")
-)
-const ProductDetail = asyncComponent(() =>
-import(/* webpackChunkName: "ProductDetail" */ "./container/productDetail/index")
-)
-const News = asyncComponent(() =>
-import(/* webpackChunkName: "News" */ "./container/news/index")
-)
-const Data = asyncComponent(() =>
-import(/* webpackChunkName: "Data" */ "./container/websiteData/index")
+const Login = asyncComponent(() =>
+import(/* webpackChunkName: "Login" */ "./components/Login.jsx")
 )
 const customHistory = createBrowserHistory()
-const { Header, Content, Footer, Sider } = Layout;
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 class App extends Component {
     constructor(props) {
         super(props);
@@ -108,27 +79,18 @@ class App extends Component {
         });
     }
     render() {
-        const {login,responsive} = this.props;
+        const {loginState,responsive} = this.props;
+        console.log(loginState)
         return (
             <Router history={customHistory}>
-                <Layout className="ant-layout-has-sider">
-                    {!responsive.isMobile && <SiderCustom path={customHistory.location.pathname} collapsed={this.state.collapsed} />}
-                    <Layout>
-                        <HeaderCustom toggle={this.toggle} collapsed={this.state.collapsed} responsive={responsive}  path={customHistory.location.pathname} />
-                        <Content  style={{ margin: '0 16px', overflow: 'initial' }}>
-                            <Route exact path="/" component={Home}/>
-                            <Route  path="/config" component={Config}/>
-                            <Route exact  path="/products" component={Category}/>
-                            <Route exact path="/products/:categoryId" component={Products}/>
-                            <Route  path="/products/:categoryId/:productId" component={ProductDetail}/>
-                            <Route  path="/news" component={News}/>
-                            <Route  path="/data" component={Data}/>
-                        </Content>
-                        <Footer style={{ textAlign: 'center' }}>
-                            广州辂轺科技有限公司
-                        </Footer>
-                    </Layout>
-                </Layout>
+                <div style={{height:'100%'}}>
+                    <Route path="/layout"  render={(props) => {
+                        return (loginState.login  ) ?
+                            <MyLayout {...props}/> :
+                            <Redirect to={{pathname: '/login'}}/>;
+                    }}/>
+                    <Route  path="/login" component={Login}/>
+                </div>
             </Router>
         );
     }

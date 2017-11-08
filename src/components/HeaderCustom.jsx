@@ -2,8 +2,10 @@
  * Created by hao.cheng on 2017/4/13.
  */
 import React, { Component } from 'react';
-import { Menu, Icon, Layout, Badge, Popover } from 'antd';
-// import screenfull from 'screenfull';
+import { Menu, Icon, Layout, Popconfirm, Popover } from 'antd';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as loginAction from './../actions/login';
 import SiderCustom from './SiderCustom';
 const { Header } = Layout;
 
@@ -52,6 +54,9 @@ class HeaderCustom extends Component {
     handleVisibleChange = (visible) => {
         this.setState({ visible });
     };
+    confirm=()=>{
+        this.props.signout()
+    }
     render() {
         const { responsive, path } = this.props;
         return (
@@ -69,7 +74,10 @@ class HeaderCustom extends Component {
                         />
                     )
                 }
-                <span className="logout">[退出系统]</span>
+                <Popconfirm title="确定要退出吗？" okText="确定" cancelText="取消"  placement="bottomRight" onConfirm={this.confirm}>
+                    <span className="logout">[退出系统]</span>
+                </Popconfirm>
+
                 <style>{`
                     .ant-menu-submenu-horizontal > .ant-menu {
                         width: 120px;
@@ -80,6 +88,13 @@ class HeaderCustom extends Component {
         )
     }
 }
+function mapStateToProps(state){
+    return {
+        state:state,
+    };
+}
+function mapDispatchToProps(dispath){
+    return bindActionCreators(loginAction,dispath);
+}
 
-
-export default HeaderCustom;
+export default connect(mapStateToProps,mapDispatchToProps)(HeaderCustom);

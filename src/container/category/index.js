@@ -67,7 +67,9 @@ class Manufacture extends Component {
         const that = this;
         const {page, q}=this.state;
         const addName = this.refs.AddName.getFieldsValue();
-        axios({
+        console.log(addName)
+        document.querySelector('.category')?console.log(document.querySelector('.category').src):null
+     /*   axios({
             url: `${configJson.prefix}/companies`,
             method: 'post',
             data: addName,
@@ -83,13 +85,15 @@ class Manufacture extends Component {
             }).catch(function (error) {
             console.log('获取出错', error);
             converErrorCodeToMsg(error)
-        })
+        })*/
     }
     editData=()=>{
         const editName = this.refs.EditName.getFieldsValue();
         const that = this;
         const {page, q}=this.state;
-        axios({
+        console.log(editName)
+        document.querySelector('.category')?console.log(document.querySelector('.category').src):null
+    /*    axios({
             url: `${configJson.prefix}/companies/${this.state.editId}`,
             method: 'put',
             params: editName,
@@ -105,12 +109,13 @@ class Manufacture extends Component {
             }).catch(function (error) {
             console.log('获取出错', error);
             converErrorCodeToMsg(error)
-        })
+        })*/
     }
     delData = (id)=> {
         const that = this;
         const {page, q}=this.state;
-        axios({
+        console.log(id)
+  /*      axios({
             url: `${configJson.prefix}/companies/${id}`,
             method: 'delete',
             headers: getHeader()
@@ -122,7 +127,7 @@ class Manufacture extends Component {
             }).catch(function (error) {
             console.log('获取出错', error);
             converErrorCodeToMsg(error)
-        })
+        })*/
     }
 
     onChangeSearch = (page, q,)=> {
@@ -257,7 +262,7 @@ class Manufacture extends Component {
                 <Modal
                     key={ Date.parse(new Date())}
                     visible={this.state.addModal}
-                    title="添加制造厂商"
+                    title="添加产品分类"
                     onCancel={()=> {
                         this.setState({addModal: false})
                     }}
@@ -276,7 +281,7 @@ class Manufacture extends Component {
                 <Modal
                     key={ Date.parse(new Date()) + 1}
                     visible={this.state.editModal}
-                    title="修改制造厂商"
+                    title="修改产品分类"
                     onCancel={()=> {
                         this.setState({editModal: false})
                     }}

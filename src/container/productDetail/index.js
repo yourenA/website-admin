@@ -43,10 +43,10 @@ class Manufacture extends Component {
     }
 
     componentDidMount() {
-        this.fetchHwData();
+        this.getInfo();
     }
 
-    fetchHwData = (page = 1, q = '') => {
+    getInfo = (page = 1, q = '') => {
         const that = this;
         that.setState({
             loading: false,
@@ -82,26 +82,14 @@ class Manufacture extends Component {
                 }]
         })
     }
-    dragulaDecorator = (componentBackingInstance) => {
-        const that = this;
-        if (componentBackingInstance) {
-            let options = {
-                revertOnSpill: false,
-                removeOnSpill: false,
-                isContainer: function (el) {
-                    return false; // only elements in drake.containers will be taken into account
-                },
-            };
-            let drake = Dragula([componentBackingInstance], options);
-            drake.on('drop', (el, target, source, sibling) => {
-            });
-        }
-    };
     updateState = obj=> {
         this.setState(obj,function () {
             if(obj.draggingIndex == null){
                 console.log(this.state.data)
-                console.log('提交更改')
+                let sortArr=this.state.data.map(function (item,index) {
+                    return item.id
+                })
+                console.log('sortArr',sortArr)
             }
         });
     }
@@ -110,6 +98,72 @@ class Manufacture extends Component {
             open:this.state.open+1,
             imageUrl:image
         })
+    }
+    addData = ()=> {
+        const that = this;
+        const {page, q}=this.state;
+        const addName = this.refs.AddName.getFieldsValue();
+        console.log(addName)
+        document.querySelector('.category')?console.log(document.querySelector('.category').src):null
+        /*   axios({
+         url: `${configJson.prefix}/companies`,
+         method: 'post',
+         data: addName,
+         headers: getHeader()
+         })
+         .then(function (response) {
+         console.log(response.data);
+         message.success(messageJson[`add manufacture success`]);
+         that.setState({
+         addModal:false
+         })
+         that.fetchHwData(page, q);
+         }).catch(function (error) {
+         console.log('获取出错', error);
+         converErrorCodeToMsg(error)
+         })*/
+    }
+    editData=()=>{
+        const editName = this.refs.EditName.getFieldsValue();
+        const that = this;
+        const {page, q}=this.state;
+        console.log(editName)
+        document.querySelector('.category')?console.log(document.querySelector('.category').src):null
+        /*    axios({
+         url: `${configJson.prefix}/companies/${this.state.editId}`,
+         method: 'put',
+         params: editName,
+         headers: getHeader()
+         })
+         .then(function (response) {
+         console.log(response.data);
+         message.success(messageJson[`edit manufacture success`]);
+         that.setState({
+         editModal:false
+         });
+         that.fetchHwData(page, q);
+         }).catch(function (error) {
+         console.log('获取出错', error);
+         converErrorCodeToMsg(error)
+         })*/
+    }
+    delData = (id)=> {
+        const that = this;
+        const {page, q}=this.state;
+        console.log(id)
+        /*      axios({
+         url: `${configJson.prefix}/companies/${id}`,
+         method: 'delete',
+         headers: getHeader()
+         })
+         .then(function (response) {
+         console.log(response.data);
+         message.success(messageJson[`del manufacture success`]);
+         that.fetchHwData(page, q);
+         }).catch(function (error) {
+         console.log('获取出错', error);
+         converErrorCodeToMsg(error)
+         })*/
     }
     render() {
         const that = this;
@@ -134,7 +188,7 @@ class Manufacture extends Component {
                             <div className="edit-icon">
                                 <Icon type="edit" onClick={()=>that.setState({editRecord:item,editModal:true})}/>
                                 <Popconfirm placement="bottomRight" title={ `确定要删除吗?`}
-                                          >
+                                            onConfirm={that.delData.bind(that, item.id)}>
                                 <Icon type="delete" />
                                     </Popconfirm>
                             </div>
@@ -154,7 +208,7 @@ class Manufacture extends Component {
                     <Col sm={24}  md={18} lg={10}>
                         <div >
                             <Card title="产品名称及顶部图片">
-                                <TitleImage  imageUrl={pc1}/>
+                                <TitleImage />
                             </Card>
                         </div>
                     </Col>
@@ -169,9 +223,6 @@ class Manufacture extends Component {
                     </div>
 
                     <div className="product-detail">
-                        {/* <div className='ul' ref={this.dragulaDecorator}>
-                         {renderdetailList}
-                         </div>*/}
                         <div  className='ul'>{renderdetailList}</div>
 
                     </div>
@@ -216,12 +267,12 @@ class Manufacture extends Component {
                                 onClick={()=> {
                                     this.setState({editModal: false})
                                 }}>取消</Button>,
-                        <Button key="submit" type="primary" size="large" onClick={this.addData}>
+                        <Button key="submit" type="primary" size="large" onClick={this.editData}>
                             保存
                         </Button>,
                     ]}
                 >
-                    <AddOrEditName ref="AddName" isEdit={true} editRecord={this.state.editRecord}/>
+                    <AddOrEditName ref="EditName" isEdit={true} editRecord={this.state.editRecord}/>
                 </Modal>
             </div>
         )
