@@ -147,10 +147,10 @@ class ThemeInput extends React.Component {
         return (
         <Row gutter={16}>
             <Col className="gutter-row deletePadding" span={3}>
-                <div className="gutter-box float-right"> 名称:</div>
+                <div className="  float-right"> 名称:</div>
             </Col>
             <Col className="gutter-row" span={8}>
-                <div className="gutter-box">
+                <div className=" ">
                     <Input
                         type="text"
                         value={state.name}
@@ -159,10 +159,10 @@ class ThemeInput extends React.Component {
                 </div>
             </Col>
             <Col className="gutter-row deletePadding" span={2}>
-                <div className="gutter-box  float-right"> url:</div>
+                <div className="   float-right"> url:</div>
             </Col>
             <Col className="gutter-row" span={7}>
-                <div className="gutter-box">
+                <div className=" ">
                     <Input
                         type="text"
                         value={state.url}
@@ -171,7 +171,7 @@ class ThemeInput extends React.Component {
                 </div>
             </Col>
             <Col className="gutter-row" span={2}>
-                <div className="gutter-box">
+                <div className=" ">
                     {
                         this.props.keys.length > 1 ? <Icon
                             className="dynamic-delete-button"

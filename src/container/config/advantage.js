@@ -2,14 +2,43 @@
  * Created by Administrator on 2017/6/13.
  */
 import React from 'react'
-import {Button, Icon, Input, Form, Select, Col,Row} from 'antd';
+import {Button, Icon, Input, Form,  Col,Row} from 'antd';
+import axios from 'axios'
+import configJson from 'configJson' ;
+import {processResult} from './../../common/common.js';
 const FormItem = Form.Item;
-const Option = Select.Option;
+
 class DynamicFieldSet extends React.Component {
     constructor(props) {
         super(props);
-        this.uuid=this.props.advantage.length-1;
-        this.state = {};
+        this.uuid=0;
+        this.state = {
+            data:[]
+        };
+    }
+    componentDidMount() {
+        this.getInfo();
+    }
+    getInfo = ()=> {
+        const that = this;
+        axios({
+            url: `${configJson.prefix}/advantage`,
+            method: 'get',
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.data.status === 200) {
+                    that.setState({
+                        data: response.data.data
+                    },function () {
+                        this.uuid=this.state.data.length
+                    })
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
+
     }
     remove = (k) => {
         const {form} = this.props;
@@ -27,6 +56,7 @@ class DynamicFieldSet extends React.Component {
     }
 
     add = () => {
+        console.log(this.uuid)
         this.uuid++;
         const {form} = this.props;
         // can use data-binding to get
@@ -46,10 +76,21 @@ class DynamicFieldSet extends React.Component {
                 let topic=[]
                 for (let k in values) {
                     if (k.indexOf('topics') >= 0) {
-                        topic.push({theme:values[k].theme,icon:values[k].icon})
+                        topic.push({description:values[k].description,icon:values[k].icon})
                     }
                 }
                 console.log("topic",topic)
+                axios({
+                    url: `${configJson.prefix}/advantage/edit`,
+                    method: 'POST',
+                    data: {advantageArr:topic},
+                })
+                    .then(function (response) {
+                        console.log(response.data)
+                        processResult(response)
+                    }).catch(function (error) {
+                    console.log('获取出错', error);
+                })
             }
         });
     }
@@ -60,7 +101,7 @@ class DynamicFieldSet extends React.Component {
     renderList=()=>{
         const {getFieldDecorator, getFieldValue} = this.props.form;
         const keysArr=[];
-        for(let k in this.props.advantage){
+        for(let k in this.state.data){
             keysArr.push(parseInt(k))
         }
         getFieldDecorator('keys', {initialValue: keysArr});
@@ -71,11 +112,9 @@ class DynamicFieldSet extends React.Component {
                     required={false}
                     key={k}>
                     {getFieldDecorator(`topics-${k}`, {
-                        initialValue: this.props.advantage[k]?this.props.advantage[k]:{theme: '', icon: ''},
+                        initialValue: this.state.data[k]?this.state.data[k]:{description: '', icon: ''},
                     })(<ThemeInput keys={keys} k={k} remove={this.remove}/>)}
-
                 </FormItem>
-
             );
         });
         return formItems
@@ -96,7 +135,6 @@ class DynamicFieldSet extends React.Component {
                     </Button>
                 </FormItem>
                 <div className="edit-btn">
-                    <Button onClick={this.reset}>重置</Button>
                     <Button type="primary" htmlType="submit">确定</Button>
                 </div>
             </Form>
@@ -110,7 +148,7 @@ class ThemeInput extends React.Component {
 
         const value = this.props.value || {};
         this.state = {
-            theme: value.theme || '',
+            description: value.description || '',
             icon: value.icon || "",
         };
     }
@@ -124,11 +162,11 @@ class ThemeInput extends React.Component {
     }
 
     handleNumberChange = (e) => {
-        const theme = e.target.value;
+        const description = e.target.value;
         if (!('value' in this.props)) {
-            this.setState({theme});
+            this.setState({description});
         }
-        this.triggerChange({theme});
+        this.triggerChange({description});
     }
     handleCurrencyChange = (e) => {
         const icon = e.target.value;
@@ -149,23 +187,23 @@ class ThemeInput extends React.Component {
         const state = this.state;
         return (
         <Row gutter={16}>
-            <Col className="gutter-row deletePadding" span={3}>
-                <div className="gutter-box  float-right"> 描述:</div>
+            <Col className="deletePadding" span={3}>
+                <div className=" float-right"> 描述:</div>
             </Col>
             <Col className="gutter-row" span={8}>
-                <div className="gutter-box">
+                <div className="">
                     <Input
                         type="text"
-                        value={state.theme}
+                        value={state.description}
                         onChange={this.handleNumberChange}
                     />
                 </div>
             </Col>
-            <Col className="gutter-row deletePadding" span={3}>
-                <div className="gutter-box  float-right"> ICON:</div>
+            <Col className="deletePadding" span={3}>
+                <div className="   float-right"> ICON:</div>
             </Col>
             <Col className="gutter-row" span={7}>
-                <div className="gutter-box">
+                <div className=" ">
                     <Input
                         type="text"
                         value={state.icon}
@@ -174,7 +212,7 @@ class ThemeInput extends React.Component {
                 </div>
             </Col>
             <Col className="gutter-row" span={2}>
-                <div className="gutter-box">
+                <div className=" ">
                     {
                         this.props.keys.length > 1 ? <Icon
                             className="dynamic-delete-button"
@@ -185,10 +223,6 @@ class ThemeInput extends React.Component {
             </Col>
 
         </Row>
-
-
-
-
         );
     }
 }

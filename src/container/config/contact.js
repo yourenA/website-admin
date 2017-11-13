@@ -2,7 +2,10 @@
  * Created by Administrator on 2017/6/13.
  */
 import React from 'react'
-import { Button,Input, Form} from 'antd';
+import { Button,Input, Form,message} from 'antd';
+import axios from 'axios'
+import configJson from 'configJson' ;
+import { processResult} from './../../common/common.js';
 const FormItem = Form.Item;
 
 class Demo extends React.Component {
@@ -12,45 +15,47 @@ class Demo extends React.Component {
     }
     getInfo=()=>{
         const that=this;
-        console.log('getInfo');
-        setTimeout(function () {
-            that.setState({
-                address:'广州市天河区天河东路242号601室',
-                phone:'+86 020 87519370',
-                fax:'+86 020 85262282',
-                email:'info@amwares.com'
+        axios({
+            url: `${configJson.prefix}/contact`,
+            method: 'get',
+        })
+            .then(function (response) {
+                console.log(response);
+                if(response.data.status===200){
+                    that.setState({
+                        address:response.data.data[0].address,
+                        tel:response.data.data[0].tel,
+                        fax:response.data.data[0].fax,
+                        email:response.data.data[0].email,
+                    })
+                }else{
+                }
             })
-        },2000)
+            .catch(function (error) {
+                console.log(error)
+            });
 
     }
-    reset=()=>{
-        this.props.form.resetFields();
-        this.handleSubmit()
-    }
     handleSubmit = (e) => {
-        e?e.preventDefault():null
+        e?e.preventDefault():null;
         const that=this
         console.log(that.state.imageUrl)
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                /*this.setState({
-                    address:values.address,
-                    phone:values.phone,
-                    fax:values.fax,
-                    email:values.email
-                })*/
-                /*  axios({
-                 url: `http://localhost:3000/users`,
-                 method: 'POST',
-                 data:values
-                 })
-                 .then(function (response) {
-
-                 console.log(response.data)
-                 }).catch(function (error) {
-                 console.log('获取出错', error);
-                 })*/
+                const that=this;
+                axios({
+                    url: `${configJson.prefix}/contact/edit`,
+                    method: 'post',
+                    data:{...values}
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        processResult(response)
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
             }
         });
     }
@@ -60,7 +65,6 @@ class Demo extends React.Component {
             labelCol: {span: 5},
             wrapperCol: {span: 19},
         };
-        const imageUrl = this.state.imageUrl;
         return (
             <div >
                 <Form onSubmit={this.handleSubmit}>
@@ -77,8 +81,8 @@ class Demo extends React.Component {
                     <FormItem
                         label="公司电话"
                         {...formItemLayout}>
-                        {getFieldDecorator('phone', {
-                            initialValue:  this.state.phone,
+                        {getFieldDecorator('tel', {
+                            initialValue:  this.state.tel,
                         })(
                             <Input  />
                         )}
@@ -102,7 +106,6 @@ class Demo extends React.Component {
                         )}
                     </FormItem>
                     <div className="edit-btn">
-                        <Button onClick={this.reset}>重置</Button>
                         <Button type="primary" htmlType="submit" >确定</Button>
                     </div>
                 </Form>

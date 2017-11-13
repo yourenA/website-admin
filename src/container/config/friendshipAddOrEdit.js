@@ -23,27 +23,6 @@ class AddOrEditNameForm extends React.Component {
             labelCol: {span: 5},
             wrapperCol: {span: 16},
         };
-        const residences = [{
-            value: '北京',
-            label: '北京',
-        }, {
-            value: '江苏',
-            label: '江苏',
-            children: [{
-                value: '南京',
-                label: '南京',
-            }],
-        }, {
-            value: '广东',
-            label: '广东',
-            children: [{
-                value: '广州',
-                label: '广州',
-            },{
-                value: '佛山',
-                label: '佛山',
-            }],
-        }];
         return (
             <Form onSubmit={this.handleSubmit} className="login-form">
                     <div>
@@ -58,14 +37,13 @@ class AddOrEditNameForm extends React.Component {
                             )}
                         </FormItem>
                         <FormItem
-                            {...formItemLayout}
-                            label="城市"
-                        >
-                            {getFieldDecorator('residence', {
-                                initialValue:this.props.isEdit ? this.props.editRecord.province? [this.props.editRecord.province,this.props.editRecord.city]:[this.props.editRecord.city] :  [],
-                                rules: [{ type: 'array', required: true, message: '请选择城市' }],
+                            label={'URL'}
+                            {...formItemLayout}>
+                            {getFieldDecorator('url', {
+                                initialValue: this.props.isEdit ? this.props.editRecord.url : '',
+                                rules: [{required: true, message: `请输入URL`}],
                             })(
-                                <Cascader placeholder="请选择" options={residences} />
+                                <Input  />
                             )}
                         </FormItem>
                     </div>

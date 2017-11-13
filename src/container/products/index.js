@@ -9,19 +9,8 @@ import {
 } from 'react-router-dom';
 import SearchWrap from  './search';
 import configJson from 'configJson' ;
-import {getHeader, converErrorCodeToMsg} from './../../common/common';
+import { processResult} from './../../common/common';
 import AddName from './addName';
-import messageJson from './../../common/message.json';
-import icon1 from './../../images/icon1.png'
-import icon2 from './../../images/icon2.png'
-import icon3 from './../../images/icon3.png'
-import icon4 from './../../images/icon5.png'
-import icon5 from './../../images/icon4.png'
-import image1 from './../../images/1.jpg'
-import image2 from './../../images/2.jpg'
-import image3 from './../../images/3.jpg'
-import image4 from './../../images/item4.jpg'
-import image5 from './../../images/5.jpg'
 import {connect} from 'react-redux';
 import './index.less'
 const {Content,} = Layout;
@@ -35,72 +24,81 @@ class Manufacture extends Component {
             page: 1,
             meta: {pagination: {total: 0, per_page: 0}},
             editModal: false,
-            addModal: false
+            addModal: false,
+            currentPage:1,
+            count:0
         };
     }
 
     componentDidMount() {
-        this.getInfo();
+        this.getInfo(this.state.currentPage);
     }
 
-    getInfo = (page = 1, q = '') => {
+    getInfo = (currentPage)=> {
+        console.log(this.props)
         const that = this;
-                that.setState({
-                    loading: false,
-                    data: [{
-                        id: 0,
-                        icon: icon5,
-                        name: '产品0',
-                        desc: '电动助力转向系统（Electric Power Steering），既节省能量，又保护了环境。',
-                        image:image1
-                    },
-                        {id: 1, icon: icon3,image:image5, name: '产品1', desc: '电动助力转向系统（Electric Power Steering），既节省能量，又保护了环境。'},
-                        {id: 2, icon: icon4,image:image2, name: '产品2', desc: '电动助力转向系统（Electric Power Steering），既节省能量，又保护了环境。'},
-                        {id: 3, icon: icon1,image:image3, name: '产品3', desc: '电动助力转向系统（Electric Power Steering），既节省能量，又保护了环境。'},
-                        {id: 4, icon: icon2,image:image4, name: '产品4', desc: '电动助力转向系统（Electric Power Steering），既节省能量，又保护了环境。'}],
-                })
+        axios({
+            url: `${configJson.prefix}/product/${this.props.match.params.categoryId}/${currentPage}`,
+            method: 'get',
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.data.status === 200) {
+                    that.setState({
+                        data: response.data.data.rows,
+                        count: response.data.data.count
+                    })
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
+
     }
     addData = ()=> {
         const that = this;
-        const {page, q}=this.state;
         const addName = this.refs.AddName.getFieldsValue();
-        console.log(addName)
-        this.props.history.push(`${this.props.match.url}/new`)
-        // axios({
-        //     url: `${configJson.prefix}/companies`,
-        //     method: 'post',
-        //     data: addName,
-        //     headers: getHeader()
-        // })
-        //     .then(function (response) {
-        //         console.log(response.data);
-        //         message.success(messageJson[`add manufacture success`]);
-        //         that.setState({
-        //             addModal:false
-        //         })
-        //         that.fetchHwData(page, q);
-        //     }).catch(function (error) {
-        //     console.log('获取出错', error);
-        //     converErrorCodeToMsg(error)
-        // })
+        console.log(addName);
+        for(let key in  addName){
+            if(!addName[key]){
+                message.error('所有字段都不能为空');
+                return false
+            }
+        }
+        var formData = new FormData();
+        formData.append("name", addName.name);
+        axios({
+            url: `${configJson.prefix}/product/add/${this.props.match.params.categoryId}`,
+            method: 'POST',
+            data: formData,
+        })
+            .then(function (response) {
+                console.log(response.data)
+                processResult(response, function () {
+                    // that.props.history.push(`${that.props.match.url}/new`)
+                    that.setState({
+                        addModal: false
+                    });
+                    that.getInfo(that.state.currentPage)
+                })
+            }).catch(function (error) {
+            console.log('获取出错', error);
+        })
     }
     delData = (id)=> {
         const that = this;
-        const {page, q}=this.state;
-        console.log(id)
-        // axios({
-        //     url: `${configJson.prefix}/companies/${id}`,
-        //     method: 'delete',
-        //     headers: getHeader()
-        // })
-        //     .then(function (response) {
-        //         console.log(response.data);
-        //         message.success(messageJson[`del manufacture success`]);
-        //         that.fetchHwData(page, q);
-        //     }).catch(function (error) {
-        //     console.log('获取出错', error);
-        //     converErrorCodeToMsg(error)
-        // })
+        axios({
+            url: `${configJson.prefix}/product/del/${id}`,
+            method: 'POST',
+        })
+            .then(function (response) {
+                console.log(response.data)
+                processResult(response, function () {
+                    that.getInfo(that.state.currentPage)
+                })
+            }).catch(function (error) {
+            console.log('获取出错', error);
+        })
     }
 
     onChangeSearch = (page, q,)=> {
@@ -150,7 +148,7 @@ class Manufacture extends Component {
                 <Content style={{background: '#fff', padding: '10px'}}>
                     <Breadcrumb className="breadcrumb">
                         <Breadcrumb.Item>产品分类</Breadcrumb.Item>
-                        <Breadcrumb.Item>EPB电子驻车制动系统</Breadcrumb.Item>
+                        <Breadcrumb.Item>{`${this.props.match.params.categoryId}`}</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="operate-box">
                         <SearchWrap onChangeSearch={this.onChangeSearch} {...this.state} {...this.props}/>

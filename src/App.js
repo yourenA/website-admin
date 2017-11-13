@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Layout, Menu, Icon,  Badge, Popover } from 'antd';
+import { message } from 'antd';
 import {
     BrowserRouter as Router,
     Route,
@@ -84,7 +84,7 @@ class App extends Component {
         return (
             <Router history={customHistory}>
                 <div style={{height:'100%'}}>
-                    <Route path="/layout"  render={(props) => {
+                    <Route path="/background/"  render={(props) => {
                         return (loginState.login  ) ?
                             <MyLayout {...props}/> :
                             <Redirect to={{pathname: '/login'}}/>;

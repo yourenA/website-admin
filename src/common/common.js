@@ -46,3 +46,12 @@ exports.converErrorCodeToMsg = (error) => {
         message.error(messageJson['unknown error']);
     }
 }
+exports.processResult=(response,cb)=>{
+    if (response.data.status === 200) {
+        message.success(response.data.data);
+
+    } else {
+        message.error(response.data.data);
+    }
+    if(cb) cb()
+}

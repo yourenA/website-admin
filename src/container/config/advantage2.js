@@ -6,7 +6,7 @@ import {Table,Popconfirm,Pagination,Button,Modal} from 'antd';
 import axios from 'axios'
 import configJson from 'configJson' ;
 import {processResult} from './../../common/common.js';
-import AddOrEditName from './addOrEditNmae';
+import AddOrEditName from './advantageAddOrEdit';
 class Partner extends Component {
     constructor(props) {
         super(props);
@@ -26,7 +26,7 @@ class Partner extends Component {
     getInfo = ()=> {
         const that = this;
         axios({
-            url: `${configJson.prefix}/partner`,
+            url: `${configJson.prefix}/advantage`,
             method: 'get',
         })
             .then(function (response) {
@@ -45,18 +45,10 @@ class Partner extends Component {
     addData=()=>{
         const that = this;
         const addName = this.refs.AddName.getFieldsValue();
-        let postData={name:addName.name};
-        if(addName.residence.length===1){
-            postData.city=addName.residence[0]
-        }else if(addName.residence.length===2){
-            postData.province=addName.residence[0]
-            postData.city=addName.residence[1]
-        }
-        console.log("postData",postData)
         axios({
-            url: `${configJson.prefix}/partner/add`,
+            url: `${configJson.prefix}/advantage/add`,
             method: 'POST',
-            data: postData,
+            data: addName,
         })
             .then(function (response) {
                 console.log(response.data)
@@ -73,19 +65,10 @@ class Partner extends Component {
     editData=()=>{
         const that = this;
         const editName = this.refs.EditName.getFieldsValue();
-        let postData={name:editName.name};
-        if(editName.residence.length===1){
-            postData.city=editName.residence[0]
-            postData.province=''
-        }else if(editName.residence.length===2){
-            postData.province=editName.residence[0]
-            postData.city=editName.residence[1]
-        }
-        console.log("postData",postData)
         axios({
-            url: `${configJson.prefix}/partner/edit/${this.state.editId}`,
+            url: `${configJson.prefix}/advantage/edit/${this.state.editId}`,
             method: 'POST',
-            data: postData,
+            data: editName,
         })
             .then(function (response) {
                 console.log(response.data)
@@ -103,7 +86,7 @@ class Partner extends Component {
         console.log(id)
         const that=this;
         axios({
-            url: `${configJson.prefix}/partner/del/${id}`,
+            url: `${configJson.prefix}/advantage/del/${id}`,
             method: 'POST',
         })
             .then(function (response) {
@@ -118,16 +101,16 @@ class Partner extends Component {
     render() {
         const {data, page, meta} = this.state;
         const columns = [{
-            title: '名称',
-            dataIndex: 'name',
-            key: 'name',
+            title: '描述',
+            dataIndex: 'description',
+            key: 'description',
         }, {
-            title: '城市',
-            dataIndex: 'city',
-            key: 'city',
+            title: 'ICON',
+            dataIndex: 'icon',
+            key: 'icon',
             render: (text, record, index) => {
-                return(
-                    <p>{`${record.province?record.province+'/':''}${text}`}</p>
+                return (
+                    <i className={`fa ${text}`} aria-hidden="true" style={{fontSize:'20px'}}></i>
                 )
             }
         }
@@ -168,7 +151,7 @@ class Partner extends Component {
                 <Modal
                     key={ Date.parse(new Date()) }
                     visible={this.state.addModal}
-                    title="添加合作伙伴"
+                    title="添加优势"
                     onCancel={()=> {
                         this.setState({addModal: false})
                     }}
@@ -188,7 +171,7 @@ class Partner extends Component {
                 <Modal
                     key={ Date.parse(new Date()) + 1}
                     visible={this.state.editModal}
-                    title="修改合作伙伴"
+                    title="修改优势"
                     onCancel={()=> {
                         this.setState({editModal: false})
                     }}

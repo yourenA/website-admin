@@ -3,11 +3,9 @@
  */
 import React from 'react'
 import asyncComponent from './AsyncComponent'
-import { Layout, Menu, Icon,  Badge, Popover } from 'antd';
+import { Layout, Menu } from 'antd';
 import {
-    BrowserRouter as Router,
     Route,
-    Switch
 } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory'
 import {bindActionCreators} from 'redux';
@@ -25,9 +23,7 @@ const customHistory = createBrowserHistory()
 // import About from './container/about'
 // import HardwareTest from './container/hardwareTest/index';
 
-const { Header, Content, Footer, Sider } = Layout;
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+const {  Content, Footer } = Layout;
 
 const Home = asyncComponent(() =>
 import(/* webpackChunkName: "home" */ "./container/home/home")
@@ -65,20 +61,20 @@ class MyLayout extends React.Component {
         });
     }
     render() {
-        const {login,responsive} = this.props;
+        const {responsive} = this.props;
         return (
             <Layout className="ant-layout-has-sider">
                 {!responsive.isMobile && <SiderCustom path={customHistory.location.pathname} collapsed={this.state.collapsed} />}
                 <Layout>
                     <HeaderCustom toggle={this.toggle} collapsed={this.state.collapsed} responsive={responsive}  path={customHistory.location.pathname} />
                     <Content  style={{ margin: '0 16px', overflow: 'initial' }}>
-                             <Route exact  path="/layout" component={Home}/>
-                            <Route  path="/layout/config" component={Config}/>
-                            <Route exact path="/layout/products" component={Category}/>
-                            <Route exact path="/layout/products/:categoryId" component={Products}/>
-                            <Route  path="/layout/products/:categoryId/:productId" component={ProductDetail}/>
-                            <Route  path="/layout/news" component={News}/>
-                            <Route  path="/layout/data" component={Data}/>
+                             <Route exact  path="/background" component={Home}/>
+                            <Route  path="/background/config" component={Config}/>
+                            <Route exact path="/background/products" component={Category}/>
+                            <Route exact path="/background/products/:categoryId" component={Products}/>
+                            <Route  path="/background/products/:categoryId/:productId" component={ProductDetail}/>
+                            <Route  path="/background/news" component={News}/>
+                            <Route  path="/background/data" component={Data}/>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
                         广州辂轺科技有限公司

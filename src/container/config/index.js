@@ -5,21 +5,19 @@ import React from 'react'
 import { Row, Col, Card, Timeline, Alert } from 'antd';
 import Masonry from 'react-masonry-component';
 import TitleALogo from './titleAlogo'
-import Advantage from './advantage'
+import Advantage2 from './advantage2'
 import Banner from './banner'
 import Contact from './contact'
 import Partner from './partner'
 import TextUpload from './textUpload'
-import FriendshipLink from './friendshipLink'
+import FriendshipLink2 from './friendshipLink2'
 class TitleAndLogo extends React.Component {
     constructor(props) {
         super(props);
 
         const value = this.props.value || {};
         this.state = {
-            advantage:[{theme:'我们的优势',icon:'taxi'},{theme:'我们的优势',icon:'paper-plane-o'},{theme:'我们的优势',icon:'bolt'}],
             friendshipLink:[{name:'xxxx公司',url:'http://baidu.com'},{name:'xxxx公司',url:'http://baidu.com'},],
-
         };
     }
 
@@ -30,27 +28,31 @@ class TitleAndLogo extends React.Component {
         return (
             <div className="content config">
                 <Row >
-                    <Alert message="当配置项下方有'确定'按钮时，需要点击'确定'按钮才能保存数据。点击'重置'按钮时，会将当前配置项数据回退到进入页面时的状态" type="info" closable
+                    <Alert message="当配置项下方有'确定'按钮时，需要点击'确定'按钮才能保存数据。" type="info" closable
                            style={{marginTop: '10px', marginBottom: '10px'}}/>
-                    <Masonry
-                        className={'my-gallery-class'} // default ''
-                        options={masonryOptions} // default {}
-                        disableImagesLoaded={false} // default false
-                        updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
-                    >
                         <Col xs={24} sm={24}  md={12} lg={8}>
-                            <div >
+                            <div className="gutter-box">
                                 <Card bordered={false}>
                                     <div className="card-title">
                                         <h2>网站基本信息</h2>
-                                        <small></small>
                                     </div>
                                     <TitleALogo />
                                 </Card>
                             </div>
+                            <div className="gutter-box">
+                                <Card bordered={false}>
+                                    <div className="card-title">
+                                        <h2>我们的优势</h2>
+                                        <small>该模块的ICON采用<b>'Font Awesome'</b>图标，在ICON字段中填入相关的'Font Awesome'图标名称，如'fa-address-book'。详情
+                                            <a target="_blank" href="http://www.fontawesome.com.cn/faicons/">http://www.fontawesome.com.cn/faicons/</a></small>
+                                    </div>
+                                    <Advantage2/>
+                                </Card>
+                            </div>
+
                         </Col>
                         <Col xs={24} sm={24}  md={12} lg={8}>
-                            <div >
+                            <div className="gutter-box">
                                 <Card bordered={false}>
                                     <div className="card-title">
                                         <h2>首页轮播图</h2>
@@ -58,9 +60,17 @@ class TitleAndLogo extends React.Component {
                                     <Banner/>
                                 </Card>
                             </div>
+                            <div className="gutter-box">
+                                <Card bordered={false}>
+                                    <div className="card-title">
+                                        <h2>友情链接</h2>
+                                    </div>
+                                    <FriendshipLink2 />
+                                </Card>
+                            </div>
                         </Col>
                         <Col  xs={24} sm={24}  md={12} lg={8}>
-                            <div >
+                            <div className="gutter-box">
                                 <Card bordered={false}>
                                     <div className="card-title">
                                         <h2>联系方式</h2>
@@ -68,9 +78,7 @@ class TitleAndLogo extends React.Component {
                                     <Contact/>
                                 </Card>
                             </div>
-                        </Col>
-                        <Col xs={24} sm={24}  md={12} lg={8}>
-                            <div >
+                            <div className="gutter-box">
                                 <Card bordered={false}>
                                     <div className="card-title">
                                         <h2 >合作伙伴</h2>
@@ -79,31 +87,6 @@ class TitleAndLogo extends React.Component {
                                 </Card>
                             </div>
                         </Col>
-                        <Col  xs={24} sm={24} md={12} lg={8}>
-                            <div >
-                                <Card bordered={false}>
-                                    <div className="card-title">
-                                        <h2>我们的优势</h2>
-                                        <small>该模块的ICON采用'Font Awesome'图标，在ICON字段中填入相关的'Font Awesome'图标名称，如'address-book'。注意不用填写前缀'fa-'。详情
-                                            <a href="http://www.fontawesome.com.cn/faicons/">http://www.fontawesome.com.cn/faicons/</a></small>
-                                    </div>
-                                    <Advantage advantage={this.state.advantage}/>
-                                </Card>
-                            </div>
-                        </Col>
-
-
-                        <Col  xs={24} sm={24}  md={12} lg={8}>
-                            <div >
-                                <Card bordered={false}>
-                                    <div className="card-title">
-                                        <h2>友情链接</h2>
-                                    </div>
-                                    <FriendshipLink friendshipLink={this.state.friendshipLink}/>
-                                </Card>
-                            </div>
-                        </Col>
-                    </Masonry>
 
                 </Row>
             </div>

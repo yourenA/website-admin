@@ -2,29 +2,18 @@
  * Created by Administrator on 2017/3/24.
  */
 import React from 'react';
-import {Form, Input, Icon, Upload,message,Button} from 'antd';
+import {Form, Input, Button} from 'antd';
 import pc1 from './../../images/3.jpg'
-const FormItem = Form.Item;
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-}
+import UploadImg from './../../components/uploadImg'
+import configJson from 'configJson' ;
+import { processResult} from './../../common/common';
+import axios from 'axios'
 
-function beforeUpload(file) {
-    console.log(file)
-    const isJPG = file.type .indexOf('image');
-    const isLt10KB = file.size / 1024  < 10;
-    if (!isLt10KB) {
-        message.error('Image must smaller than 10kb!');
-    }
-    return isJPG && isLt10KB;
-}
+const FormItem = Form.Item;
 
 class AddOrEditNameForm extends React.Component {
     constructor(props) {
         super(props);
-        this.originImageUrl='';
         this.state = {
             imageUrl:'',
             name:''
@@ -37,33 +26,10 @@ class AddOrEditNameForm extends React.Component {
     }
     getInfo=()=>{
         this.setState({
-            name:'产品一',
+            name:this.props.productId,
             imageUrl:pc1
         },function () {
-            this.originImageUrl=this.state.imageUrl
         })
-    }
-    handleChange = (info) => {
-        console.log(info)
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl => this.setState({ imageUrl }));
-        }
-    }
-    reset=()=>{
-        this.props.form.resetFields();
-        this.setState({
-            imageUrl:this.originImageUrl
-        },function () {
-            this.handleSubmit()
-        })
-
-    }
-    normFile = (e) => {
-        if (Array.isArray(e)) {
-            return e;
-        }
-        return e && e.fileList;
     }
     handleSubmit = (e) => {
         e?e.preventDefault():null
@@ -71,27 +37,35 @@ class AddOrEditNameForm extends React.Component {
         console.log(that.state.imageUrl)
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
-                console.log('imageUrl',this.state.imageUrl)
-                /*this.setState({
-                 address:values.address,
-                 phone:values.phone,
-                 fax:values.fax,
-                 email:values.email
-                 })*/
-                /*  axios({
-                 url: `http://localhost:3000/users`,
-                 method: 'POST',
-                 data:values
-                 })
-                 .then(function (response) {
-
-                 console.log(response.data)
-                 }).catch(function (error) {
-                 console.log('获取出错', error);
-                 })*/
+                var formData = new FormData();
+                formData.append("name",values.name);
+                formData.append("productUrl",document.querySelector('#productDetailFile').files[0]);
+                axios({
+                    url: `${configJson.prefix}/product/edit/${this.props.productId}`,
+                    method: 'POST',
+                    data:formData,
+                    withCredentials:true
+                })
+                    .then(function (response) {
+                        console.log(response.data)
+                        processResult(response)
+                    }).catch(function (error) {
+                    console.log('获取出错', error);
+                })
             }
         });
+    }
+    changeImg=()=>{
+        var file = document.getElementById('productDetailFile'),
+            img = document.getElementById('productDetailPreview'),
+            reader = new FileReader();
+        var files = file.files;
+        if (files && files[0]) {
+            reader.onload = function (ev) {
+                img.src = ev.target.result;
+            }
+            reader.readAsDataURL(files[0]);//在客户端上传图片之后通过 readAsDataURL() 来显示图片。
+        }
     }
     render() {
         const formItemLayout = {
@@ -115,30 +89,9 @@ class AddOrEditNameForm extends React.Component {
                             label={'顶部图片'}
                             {...formItemLayout}
                         >
-                            <div className="dropbox">
-                                {getFieldDecorator('dragger', {
-                                    valuePropName: 'fileList',
-                                    getValueFromEvent: this.normFile,
-                                })(
-                                    <Upload
-                                        className="banner-uploader"
-                                        name="profile"
-                                        showUploadList={false}
-                                        action="http://localhost:3000/profile"
-                                        beforeUpload={beforeUpload}
-                                        onChange={this.handleChange}
-                                    >
-                                        {
-                                             this.state.imageUrl ?
-                                                <img src={this.state.imageUrl} alt="" className="title-image" /> :
-                                                <Icon type="plus" className="banner-uploader-trigger" />
-                                        }
-                                    </Upload>
-                                )}
-                            </div>
+                            <UploadImg  fileId="productDetailFile" imgId="productDetailPreview" changeImg={this.changeImg} imgUrl={this.props.productUrl} />
                         </FormItem>
                         <div className="edit-btn">
-                            <Button onClick={this.reset}>重置</Button>
                             <Button type="primary" htmlType="submit">确定</Button>
                         </div>
                     </div>

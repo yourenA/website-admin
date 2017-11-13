@@ -2,19 +2,17 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Alert, Icon, Button, Modal, Popconfirm, Layout, Col,Card} from 'antd';
+import {Breadcrumb, Alert, Icon, Button, Modal, Popconfirm, Layout, Col,Card,message} from 'antd';
 import AddOrEditName from './addOrEditNmae';
-import messageJson from './../../common/message.json';
-import pc1 from './../../images/3.jpg'
-import pc2 from './../../images/1.jpg'
-import pc3 from './../../images/2.jpg'
-import pc4 from './../../images/5.jpg'
+import axios from 'axios'
 import {connect} from 'react-redux';
-import Dragula from 'react-dragula';
 import TitleImage from './titleImage';
 import './index.less'
 import {sortable} from 'react-sortable';
 import Pswp  from './../../components/pswp'
+import { processResult} from './../../common/common';
+import configJson from 'configJson' ;
+
 const {Content,} = Layout;
 class ListItem extends Component {
     render () {
@@ -31,6 +29,7 @@ class Manufacture extends Component {
         this.state = {
             draggingIndex: null,
             data: [],
+            content:[],
             loading: false,
             q: '',
             page: 1,
@@ -44,49 +43,49 @@ class Manufacture extends Component {
 
     componentDidMount() {
         this.getInfo();
+        this.getContent();
     }
 
-    getInfo = (page = 1, q = '') => {
+    getInfo = ()=> {
         const that = this;
-        that.setState({
-            loading: false,
-            data: [{
-                id: 1,
-                title: '空调控制ECU1',
-                desc: '该产品能够完美替代原厂TOYOTA的相关空调控制ECU产品，实现对压缩机、空调控制面板、蒸发器、电机等的整个空调系统的控制。该产品能够完美替代原厂TOYOTA的相关空调控制ECU产品，实现对压缩机、空调控制面板、蒸发器、电机等的整个空调系统的控制。该产品能够完美替代原厂TOYOTA的相关空调控制ECU产品，实现对压缩机、空调控制面板、蒸发器、电机等的整个空调系统的控制。，实现对压缩机、空调控制面板、蒸发器、电机等的整个空调系统的控制。',
-                image: pc1
-            },
-                {
-                    id: 2,
-                    title: '空调控制ECU2',
-                    desc: '该产品能够完美替代原厂TOYOTA的相关空调控制ECU产品，实现对压缩机、空调控制面板、蒸发器、电机等的整个空调系统的控制。',
-                    image: pc2
-                },
-                {
-                    id: 3,
-                    title: '空调控制ECU3',
-                    desc: '该产品能够完美替代原厂TOYOTA的相关空调控制ECU产品，实现对压缩机、空调控制面板、蒸发器、电机等的整个空调系统的控制。',
-                    image: pc3
-                },
-                {
-                    id: 4,
-                    title: '空调控制ECU4',
-                    desc: '该产品能够完美替代原厂TOYOTA的相关空调控制ECU产品，实现对压缩机、空调控制面板、蒸发器、电机等的整个空调系统的控制。',
-                    image: pc4
-                },
-                {
-                    id: 5,
-                    title: '空调控制ECU5',
-                    desc: '该产品能够完美替代原厂TOYOTA的相关空调控制ECU产品，实现对压缩机、空调控制面板、蒸发器、电机等的整个空调系统的控制。',
-                    image: pc4
-                }]
+        axios({
+            url: `${configJson.prefix}/classify/`,
+            method: 'get',
         })
+            .then(function (response) {
+                console.log(response);
+                if (response.data.status === 200) {
+                    that.setState({
+                    })
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
+
+    }
+    getContent=()=>{
+        const that = this;
+        axios({
+            url: `${configJson.prefix}/content/${this.props.match.params.productId}/1`,
+            method: 'get',
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.data.status === 200) {
+                    that.setState({
+                        content:response.data.data.rows
+                    })
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
     }
     updateState = obj=> {
         this.setState(obj,function () {
             if(obj.draggingIndex == null){
-                console.log(this.state.data)
-                let sortArr=this.state.data.map(function (item,index) {
+                let sortArr=this.state.content.map(function (item,index) {
                     return item.id
                 })
                 console.log('sortArr',sortArr)
@@ -101,90 +100,105 @@ class Manufacture extends Component {
     }
     addData = ()=> {
         const that = this;
-        const {page, q}=this.state;
         const addName = this.refs.AddName.getFieldsValue();
-        console.log(addName)
-        document.querySelector('.category')?console.log(document.querySelector('.category').src):null
-        /*   axios({
-         url: `${configJson.prefix}/companies`,
-         method: 'post',
-         data: addName,
-         headers: getHeader()
-         })
-         .then(function (response) {
-         console.log(response.data);
-         message.success(messageJson[`add manufacture success`]);
-         that.setState({
-         addModal:false
-         })
-         that.fetchHwData(page, q);
-         }).catch(function (error) {
-         console.log('获取出错', error);
-         converErrorCodeToMsg(error)
-         })*/
+        console.log(addName);
+        for(let key in  addName){
+            if(!addName[key]){
+                message.error('所有字段都不能为空');
+                return false
+            }
+        }
+        if(!document.querySelector('#contentFile').files[0]){
+            message.error('所有字段都不能为空');
+            return false
+        }
+        var formData = new FormData();
+        formData.append("title", addName.title);
+        formData.append("description", addName.description);
+        formData.append("contentUrl", document.querySelector('#contentFile').files[0]);
+        axios({
+            url: `${configJson.prefix}/content/add/${this.props.match.params.productId}`,
+            method: 'POST',
+            data: formData,
+        })
+            .then(function (response) {
+                console.log(response.data)
+                processResult(response, function () {
+                    that.setState({
+                        addModal: false
+                    });
+                    that.getContent()
+                })
+            }).catch(function (error) {
+            console.log('获取出错', error);
+        })
     }
     editData=()=>{
         const editName = this.refs.EditName.getFieldsValue();
         const that = this;
-        const {page, q}=this.state;
-        console.log(editName)
-        document.querySelector('.category')?console.log(document.querySelector('.category').src):null
-        /*    axios({
-         url: `${configJson.prefix}/companies/${this.state.editId}`,
-         method: 'put',
-         params: editName,
-         headers: getHeader()
-         })
-         .then(function (response) {
-         console.log(response.data);
-         message.success(messageJson[`edit manufacture success`]);
-         that.setState({
-         editModal:false
-         });
-         that.fetchHwData(page, q);
-         }).catch(function (error) {
-         console.log('获取出错', error);
-         converErrorCodeToMsg(error)
-         })*/
+        console.log(editName);
+        for(let key in  editName){
+            if(!editName[key]){
+                message.error('所有字段都不能为空');
+                return false
+            }
+        }
+        var formData = new FormData();
+        formData.append("title", editName.title);
+        formData.append("description", editName.description);
+        formData.append("contentUrl", document.querySelector('#contentFile').files[0]);
+        axios({
+            url: `${configJson.prefix}/content/edit/${this.props.match.params.productId}`,
+            method: 'POST',
+            data: formData,
+        })
+            .then(function (response) {
+                console.log(response.data)
+                processResult(response, function () {
+                    that.setState({
+                        editModal: false
+                    });
+                    that.getContent()
+                })
+            }).catch(function (error) {
+            console.log('获取出错', error);
+        })
     }
     delData = (id)=> {
         const that = this;
-        const {page, q}=this.state;
-        console.log(id)
-        /*      axios({
-         url: `${configJson.prefix}/companies/${id}`,
-         method: 'delete',
-         headers: getHeader()
-         })
-         .then(function (response) {
-         console.log(response.data);
-         message.success(messageJson[`del manufacture success`]);
-         that.fetchHwData(page, q);
-         }).catch(function (error) {
-         console.log('获取出错', error);
-         converErrorCodeToMsg(error)
-         })*/
+        axios({
+            url: `${configJson.prefix}/content/del/${id}`,
+            method: 'POST',
+        })
+            .then(function (response) {
+                console.log(response.data)
+                processResult(response, function () {
+                    that.getContent()
+                })
+            }).catch(function (error) {
+            console.log('获取出错', error);
+        })
     }
     render() {
         const that = this;
-        const {data, page, meta} = this.state;
-        const renderdetailList = data.map(function (item, index) {
+        const {content, page, meta} = this.state;
+        const renderdetailList = content.map(function (item, index) {
             return (
                 <SortableListItem
                     key={index}
                     updateState={that.updateState}
-                    items={data}
+                    items={content}
                     draggingIndex={that.state.draggingIndex}
                     sortId={index}
                     outline="list"
                 >
                     <li>
                         <div className="left">
-                            <img src={item.image} alt="" onClick={()=>{that.openGallery(item.image)}} style={{cursor:'pointer'}}/>
+                            <img src={`${configJson.prefix}${item.contentUrl}`} alt="" onClick={()=>{that.openGallery(item.image)}} style={{cursor:'pointer'}}/>
                         </div>
                         <div className="right">
                             <h3>{item.title}</h3>
-                            <p>{item.desc}</p>
+                            <p>{item.description}</p>
                             <div className="edit-icon">
                                 <Icon type="edit" onClick={()=>that.setState({editRecord:item,editModal:true})}/>
                                 <Popconfirm placement="bottomRight" title={ `确定要删除吗?`}
@@ -196,19 +210,24 @@ class Manufacture extends Component {
                     </li></SortableListItem>
             )
         })
+        console.log(this.props)
         return (
             <div className="content config">
 
                 <Content style={{background: '#fff', padding: '10px'}}>
                     <Breadcrumb className="breadcrumb">
                         <Breadcrumb.Item>产品分类</Breadcrumb.Item>
-                        <Breadcrumb.Item>EPB电子驻车制动系统</Breadcrumb.Item>
-                        <Breadcrumb.Item>新建产品</Breadcrumb.Item>
+                        <Breadcrumb.Item
+                            style={{cursor:'pointer'}}
+                            onClick={()=>{
+                            this.props.history.goBack();
+                        }}>{this.props.match.params.categoryId}</Breadcrumb.Item>
+                        <Breadcrumb.Item>{this.props.match.params.productId}</Breadcrumb.Item>
                     </Breadcrumb>
                     <Col sm={24}  md={18} lg={10}>
                         <div >
                             <Card title="产品名称及顶部图片">
-                                <TitleImage />
+                                <TitleImage productUrl={this.state.productUrl} productId={this.props.match.params.productId}/>
                             </Card>
                         </div>
                     </Col>
