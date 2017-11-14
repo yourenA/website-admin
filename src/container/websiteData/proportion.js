@@ -2,6 +2,8 @@
  * Created by Administrator on 2017/9/13.
  */
 import React from 'react'
+import axios from 'axios'
+import configJson from 'configJson' ;
 export default class Data extends React.Component {
 
     constructor(props) {
@@ -12,81 +14,68 @@ export default class Data extends React.Component {
     }
 
     componentDidMount() {
+        this.getInfo();
 
-        var myChart = window.echarts.init(document.querySelector('.proportion'));
-       var  option = {
-            backgroundColor: '#2c343c',
+    }
+    getInfo = ()=> {
+        const that = this;
+        axios({
+            url: `${configJson.prefix}/visitor/device`,
+            method: 'get',
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.data.status === 200) {
+                    that.setState({
+                        data: response.data.data,
+                    },function () {
+                        that.renderMap()
+                    })
 
-            title: {
-                text: '',
-                left: 'center',
-                top: 20,
-                textStyle: {
-                    color: '#ccc'
                 }
-            },
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
 
+    }
+    renderMap=()=>{
+        var myChart = window.echarts.init(document.querySelector('.proportion'));
+        let data=[];
+        const keymap={pc:'电脑',phone:'手机',ipad:'平板'}
+        for(let key in this.state.data){
+            data.push({name:keymap[key],value:this.state.data[key]})
+        }
+        console.log(data)
+        var option = {
             tooltip : {
                 trigger: 'item',
                 formatter: "{a} <br/>{b} : {c} ({d}%)"
             },
-
-            visualMap: {
-                show: false,
-                min: 80,
-                max: 600,
-                inRange: {
-                    colorLightness: [0, 1]
-                }
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['电脑','手机','平板']
             },
             series : [
                 {
-                    name:'访问来源',
-                    type:'pie',
+                    name: '访问来源',
+                    type: 'pie',
                     radius : '55%',
-                    center: ['50%', '50%'],
-                    data:[
-                        {value:335, name:'移动端访问'},
-                        {value:250, name:'平板访问'},
-                        {value:400, name:'电脑访问'}
-                    ].sort(function (a, b) { return a.value - b.value; }),
-                    roseType: 'radius',
-                    label: {
-                        normal: {
-                            textStyle: {
-                                color: 'rgba(255, 255, 255, 0.3)'
-                            }
-                        }
-                    },
-                    labelLine: {
-                        normal: {
-                            lineStyle: {
-                                color: 'rgba(255, 255, 255, 0.3)'
-                            },
-                            smooth: 0.2,
-                            length: 10,
-                            length2: 20
-                        }
-                    },
+                    center: ['50%', '60%'],
+                    data:data,
                     itemStyle: {
-                        normal: {
-                            color: '#c23531',
-                            shadowBlur: 200,
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
                             shadowColor: 'rgba(0, 0, 0, 0.5)'
                         }
-                    },
-
-                    animationType: 'scale',
-                    animationEasing: 'elasticOut',
-                    animationDelay: function (idx) {
-                        return Math.random() * 200;
                     }
                 }
             ]
         };
         myChart.setOption(option);
     }
-
     render() {
         return (
                 <div className="proportion">

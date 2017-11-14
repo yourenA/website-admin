@@ -15,7 +15,7 @@ class Detail extends Component {
     }
     render() {
         return (
-            <div className="dropbox">
+            <div className="dropbox" style={this.props.style}>
                 <div className="banner-uploader">
                     <div className="ant-upload ant-upload-select ant-upload-select-text">
                                     <span className="ant-upload" role="button">

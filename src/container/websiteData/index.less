@@ -1,6 +1,32 @@
+@import "~antd/lib/style/themes/default.less";
 .web-data{
   .map,.proportion,.city{
     width: 100%;
     height: 400px;
+  }
+  .visitor-count{
+    font-size: 14px !important;
+    .date-picker{
+      height: 30px;
+      position: relative;
+      .salesExtraWrap{
+        position: absolute;
+        right: 9%;
+      }
+      .salesExtra {
+        display: inline-block;
+        margin-right: 20px;
+        a {
+          color: @text-color;
+          margin-left: 20px;
+          &:hover {
+            color: @primary-color;
+          }
+          &.currentDate {
+            color: @primary-color;
+          }
+        }
+      }
+    }
   }
 }

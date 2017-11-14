@@ -2,8 +2,11 @@
  * Created by Administrator on 2017/10/11.
  */
 import React, {Component} from 'react';
-import {Table,Popconfirm,Pagination,Button,Modal} from 'antd';
+import {Table,Pagination} from 'antd';
 import SearchWrap from './search'
+import axios from 'axios'
+import configJson from 'configJson' ;
+
 class Detail extends Component {
     constructor(props) {
         super(props);
@@ -18,15 +21,27 @@ class Detail extends Component {
         };
     }
     componentDidMount() {
-        this.fetchData();
+        this.getInfo(this.state.currentPage);
     }
-    fetchData = (page = 1, q = '') => {
-        const that=this;
-        that.setState({
-            meta: {pagination: {total: 2, per_page: 10}},
-            data:[{id:1,ip:'192.165.33.150',province:'广东',city:'广州',count:5,last_date:'2015/3/45 15:32:45'},{id:2,ip:'192.165.33.150',count:5,province:'广东',city:'广州',last_date:'2015/3/45 15:32:45'},{id:3,ip:'192.165.33.150',province:'广东',count:5,city:'广州',last_date:'2015/3/45 15:32:45'},
-                {id:89,ip:'192.165.33.150',province:'广东',city:'广州',count:5,last_date:'2015/3/45 15:32:45'},{id:233,ip:'192.165.33.150',count:5,province:'广东',city:'广州',last_date:'2015/3/45 15:32:45'},{id:23,ip:'158.65.69.22',province:'',city:'北京',count:5,last_date:'2015/3/45 15:32:45'},],
+
+    getInfo = (currentPage)=> {
+        const that = this;
+        axios({
+            url: `${configJson.prefix}/visitor`,
+            method: 'get',
         })
+            .then(function (response) {
+                console.log(response);
+                if (response.data.status === 200) {
+                    that.setState({
+                        data: response.data.data.rows,
+                        count: response.data.data.count
+                    })
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
 
     }
     delData=()=>{
@@ -44,7 +59,7 @@ class Detail extends Component {
             key: 'city',
             render: (text, record, index) => {
                 return(
-                    <p>{record.province+'/'+record.city}</p>
+                    <p>{(record.province?record.province+'/':'')+record.city}</p>
                 )
             }
         }, {

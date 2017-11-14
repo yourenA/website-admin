@@ -3,8 +3,9 @@
  */
 import React, {Component} from 'react';
 import { Input,Cascader,DatePicker} from 'antd';
+import {provinceAndCity} from './../../common/common'
 const Search = Input.Search;
-const { MonthPicker, RangePicker } = DatePicker;
+const {  RangePicker } = DatePicker;
 class UserManageSearch extends Component {
     constructor(props) {
         super(props);
@@ -24,27 +25,7 @@ class UserManageSearch extends Component {
         console.log(date, dateString);
     }
     render() {
-        const residences = [{
-            value: '北京',
-            label: '北京',
-        }, {
-            value: '江苏',
-            label: '江苏',
-            children: [{
-                value: '南京',
-                label: '南京',
-            }],
-        }, {
-            value: '广东',
-            label: '广东',
-            children: [{
-                value: '广州',
-                label: '广州',
-            },{
-                value: '佛山',
-                label: '佛山',
-            }],
-        }];
+        const residences = provinceAndCity();
         return (
             <div className="search-wrap">
                 <span>IP : </span>
@@ -57,7 +38,7 @@ class UserManageSearch extends Component {
                 <span>城市 : </span>
                 <Cascader placeholder="请选择" options={residences} />
                 <span className="ant-divider"/>
-                <span>时间 : </span>
+                <span>最后访问时间 : </span>
                 <RangePicker onChange={this.onChange} />
             </div>
 

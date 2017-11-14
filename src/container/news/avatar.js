@@ -2,25 +2,9 @@
  * Created by Administrator on 2017/3/24.
  */
 import React from 'react';
-import {Form, Input, Icon, Upload,message} from 'antd';
+import {Form} from 'antd';
+import UploadImg from './../../components/uploadImg'
 const FormItem = Form.Item;
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-}
-
-function beforeUpload(file) {
-    const isImage = file.type.indexOf('image')>=0 ;
-    if (!isImage) {
-        message.error('必须上传图片');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 1;
-    if (!isLt2M) {
-        message.error('图片大小必须小于 1MB!');
-    }
-    return isImage && isLt2M;
-}
 
 
 class AddOrEditNameForm extends React.Component {
@@ -32,20 +16,18 @@ class AddOrEditNameForm extends React.Component {
     }
 
     componentDidMount() {
-
     }
-    handleChange = (info) => {
-        console.log(info)
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl => this.setState({ imageUrl }));
+    changeImg=()=>{
+        var file = document.getElementById('avatarFile'),
+            img = document.getElementById('avatarPreview'),
+            reader = new FileReader();
+        var files = file.files;
+        if (files && files[0]) {
+            reader.onload = function (ev) {
+                img.src = ev.target.result;
+            }
+            reader.readAsDataURL(files[0]);//在客户端上传图片之后通过 readAsDataURL() 来显示图片。
         }
-    }
-    normFile = (e) => {
-        if (Array.isArray(e)) {
-            return e;
-        }
-        return e && e.fileList;
     }
     render() {
         const formItemLayout = {
@@ -54,35 +36,15 @@ class AddOrEditNameForm extends React.Component {
         };
         const {getFieldDecorator} = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit} className="login-form">
+            <form>
                     <div>
                         <FormItem
                         >
-                            <div className="dropbox">
-                                {getFieldDecorator('dragger', {
-                                    valuePropName: 'fileList',
-                                    getValueFromEvent: this.normFile,
-                                })(
-                                    <Upload
-                                        className="banner-uploader"
-                                        name="profile"
-                                        showUploadList={false}
-                                        action="http://localhost:3000/profile"
-                                        beforeUpload={beforeUpload}
-                                        onChange={this.handleChange}
-                                    >
-                                        {
-                                             this.state.imageUrl ?
-                                                <img src={this.state.imageUrl} alt="" className="title-image" /> :
-                                                <Icon type="plus" className="banner-uploader-trigger" />
-                                        }
-                                    </Upload>
-                                )}
-                            </div>
+                                <UploadImg  fileId="avatarFile" imgId="avatarPreview" changeImg={this.changeImg} imgUrl={this.props.editRecord?this.props.editRecord.classifyUrl:''} />
                         </FormItem>
 
                     </div>
-            </Form>
+            </form>
         );
     }
 }

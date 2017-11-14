@@ -195,7 +195,7 @@ class Demo extends React.Component {
         })
         return (
             <div>
-                <Alert message="拖动每一个行可以改变顺序" type="info" closable
+                <Alert message="拖动每一行可以改变顺序" type="info" closable
                        style={{marginTop: '10px', marginBottom: '10px'}}/>
                 <Button type="primary" icon="plus" style={{marginBottom: '10px'}} onClick={()=> {
                     this.setState({addModal: true})

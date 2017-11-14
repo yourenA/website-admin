@@ -2,14 +2,12 @@
  * Created by Administrator on 2017/6/13.
  */
 import React from 'react'
-import { Row, Col, Card, Timeline, Alert } from 'antd';
-import Masonry from 'react-masonry-component';
+import { Row, Col, Card,  Alert } from 'antd';
 import TitleALogo from './titleAlogo'
 import Advantage2 from './advantage2'
 import Banner from './banner'
 import Contact from './contact'
 import Partner from './partner'
-import TextUpload from './textUpload'
 import FriendshipLink2 from './friendshipLink2'
 class TitleAndLogo extends React.Component {
     constructor(props) {
@@ -22,9 +20,6 @@ class TitleAndLogo extends React.Component {
     }
 
     render() {
-        var masonryOptions = {
-            transitionDuration: 0
-        };
         return (
             <div className="content config">
                 <Row >

@@ -4,15 +4,10 @@
 import React, {Component} from 'react';
 import {Breadcrumb, Table, Icon, Button, Modal, Popconfirm, Layout,message} from 'antd';
 import axios from 'axios'
-import {
-    Link
-} from 'react-router-dom';
-import SearchWrap from  './search';
 import configJson from 'configJson' ;
-import {getHeader, converErrorCodeToMsg} from './../../common/common';
+import {processResult} from './../../common/common';
 import AddOrEditName from './addOrEditNmae';
 import Avatar from './avatar';
-import messageJson from './../../common/message.json';
 import avatar from './../../images/avatar.png'
 import {connect} from 'react-redux';
 import './index.less'
@@ -37,40 +32,105 @@ class Manufacture extends Component {
     componentDidMount() {
         this.getInfo();
     }
-
-    getInfo = (page = 1, q = '') => {
+    getInfo = (currentPage)=> {
         const that = this;
-                that.setState({
-                    loading: false,
-                    data:[{date:"2017-10-16 10:40:50",image:'http://img.weiot.net/portal/201401/29/200809um073mx02zoxdk7p.gif',desc:'这是简要新闻，包含一张图片，描述文字字数限制在140以内,描述文字字数限制在140以内,描述文字字数限制在140以内,描述文字字数限制在140以内，描述文字字数限制在140以内,描述文字字数限制在140以内,描述文字字数限制在140以内,描述文字字数限制在140以内.'},
-                        {date:"2017-10-16 10:40:50",image:'http://f12.baidu.com/it/u=1505322598,1727959990&fm=72 ',desc:'这是简要新闻，包含一张图片，描述文字字数限制在140以内'},
-                        {date:"2017-10-16 10:40:50",image:'http://f12.baidu.com/it/u=1505322598,1727959990&fm=72',desc:'这是简要新闻，包含一张图片，描述文字字数限制在140以内'},
-                        {date:"2017-10-16 10:40:50",image:'http://f12.baidu.com/it/u=1505322598,1727959990&fm=72',desc:'这是简要新闻，包含一张图片，描述文字字数限制在140以内'},
-                        {date:"2017-10-16 10:40:50",image:'http://f12.baidu.com/it/u=1505322598,1727959990&fm=72',desc:'这是简要新闻，包含一张图片，描述文字字数限制在140以内'},]
+        axios({
+            url: `${configJson.prefix}/introduction`,
+            method: 'get',
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.data.status === 200) {
+                    that.setState({
+                        data: response.data.data.rows,
+                        count: response.data.data.count
+                    })
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
+
+    }
+    addData = ()=> {
+        const that = this;
+        const addName = this.refs.AddName.getFieldsValue();
+        console.log(addName);
+        if(!addName.description){
+            message.error('请输入内容');
+            return false
+        }
+        if(addName.description.length>140){
+            message.error('内容长度超过140个字符');
+            return false
+        }
+        var formData = new FormData();
+        formData.append("description", addName.description);
+        if(document.querySelector('#newsFile').files.length){
+            formData.append("imageUrl", document.querySelector('#newsFile').files[0]);
+        }
+        axios({
+            url: `${configJson.prefix}/introduction/add`,
+            method: 'POST',
+            data: formData,
+        })
+            .then(function (response) {
+                console.log(response.data)
+                processResult(response, function () {
+                    that.getInfo()
                 })
+            }).catch(function (error) {
+            console.log('获取出错', error);
+        })
     }
     editData=()=>{
+        const that = this;
         const editName = this.refs.EditName.getFieldsValue();
-        console.log("addName",editName);
-        document.querySelector('.banner')?console.log(document.querySelector('.banner').src):null
+        console.log(editName);
+        if(!editName.description){
+            message.error('请输入内容');
+            return false
+        }
+        if(editName.description.length>140){
+            message.error('内容长度超过140个字符');
+            return false
+        }
+        var formData = new FormData();
+        formData.append("description", editName.description);
+        if(document.querySelector('#editNewsFile').files.length){
+            formData.append("imageUrl", document.querySelector('#editNewsFile').files[0]);
+        }
+        axios({
+            url: `${configJson.prefix}/introduction/edit/${this.state.editRecord.id}`,
+            method: 'POST',
+            data: formData,
+        })
+            .then(function (response) {
+                console.log(response.data)
+                processResult(response, function () {
+                    that.getInfo();
+                    that.setState({
+                        editModal:false
+                    })
+                })
+            }).catch(function (error) {
+            console.log('获取出错', error);
+        })
     }
     delData = (id)=> {
         const that = this;
-        const {page, q}=this.state;
-        console.log(id)
-        // axios({
-        //     url: `${configJson.prefix}/companies/${id}`,
-        //     method: 'delete',
-        //     headers: getHeader()
-        // })
-        //     .then(function (response) {
-        //         console.log(response.data);
-        //         message.success(messageJson[`del manufacture success`]);
-        //         that.fetchHwData(page, q);
-        //     }).catch(function (error) {
-        //     console.log('获取出错', error);
-        //     converErrorCodeToMsg(error)
-        // })
+        axios({
+            url: `${configJson.prefix}/introduction/del/${id}`,
+            method: 'POST',
+        })
+            .then(function (response) {
+                console.log(response.data)
+                processResult(response, function () {
+                    that.getInfo()
+                })
+            }).catch(function (error) {
+            console.log('获取出错', error);
+        })
     }
 
     onChangeSearch = (page, q,)=> {
@@ -99,8 +159,8 @@ class Manufacture extends Component {
                         <div className="date">
                             {item.date}
                         </div>
-                        <div className="desc">{item.desc}</div>
-                        <div className="image"><img src={item.image} alt="" onClick={()=>that.openGallery(item.image)}/></div>
+                        <div className="desc">{item.description}</div>
+                        <div className="image">{item.imageUrl?<img src={`${configJson.prefix}${item.imageUrl}`} alt="" onClick={()=>that.openGallery(`${configJson.prefix}${item.imageUrl}`)}/>:null}</div>
                         <div className="edit-icon">
                             <Icon type="edit" onClick={()=>that.setState({editRecord:item,editModal:true})}/>
                             <Popconfirm placement="bottomRight" title={ `确定要删除吗?`}
@@ -119,11 +179,11 @@ class Manufacture extends Component {
                         <div className="news-top">
                             <div className="left-avatar">
                                 <div className="left-avatar">
-                                    <Avatar imageUrl={avatar} />
+                                    <Avatar />
                                 </div>
                             </div>
                             <div className="right-input">
-                                <AddOrEditName />
+                                <AddOrEditName ref="AddName" addData={this.addData}/>
                             </div>
                         </div>
                         <div className="news-list">

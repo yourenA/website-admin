@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { message } from 'antd';
 import {
     BrowserRouter as Router,
     Route,
@@ -24,7 +23,6 @@ const customHistory = createBrowserHistory()
 class App extends Component {
     constructor(props) {
         super(props);
-        this.timer = null;
         this.state = {
             pathname: '',
             collapsed: false,
@@ -32,7 +30,6 @@ class App extends Component {
     }
 
     componentDidMount = ()=> {
-        const that = this;
         document.body.onclick = function (e) {
             // that.launchFullscreen(document.documentElement);
         }
@@ -79,7 +76,7 @@ class App extends Component {
         });
     }
     render() {
-        const {loginState,responsive} = this.props;
+        const {loginState} = this.props;
         console.log(loginState)
         return (
             <Router history={customHistory}>

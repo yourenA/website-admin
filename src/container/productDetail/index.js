@@ -148,7 +148,7 @@ class Manufacture extends Component {
         formData.append("description", editName.description);
         formData.append("contentUrl", document.querySelector('#contentFile').files[0]);
         axios({
-            url: `${configJson.prefix}/content/edit/${this.props.match.params.productId}`,
+            url: `${configJson.prefix}/content/edit/${this.state.editRecord.id}`,
             method: 'POST',
             data: formData,
         })
@@ -181,7 +181,7 @@ class Manufacture extends Component {
     }
     render() {
         const that = this;
-        const {content, page, meta} = this.state;
+        const {content} = this.state;
         const renderdetailList = content.map(function (item, index) {
             return (
                 <SortableListItem
@@ -210,7 +210,6 @@ class Manufacture extends Component {
                     </li></SortableListItem>
             )
         })
-        console.log(this.props)
         return (
             <div className="content config">
 
