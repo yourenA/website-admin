@@ -2,9 +2,8 @@
  * Created by Administrator on 2017/6/13.
  */
 import React from 'react'
-import {Button, Icon, Input, Form, Select, Col,Row} from 'antd';
+import {Button, Icon, Input, Form,  Col,Row} from 'antd';
 const FormItem = Form.Item;
-const Option = Select.Option;
 class DynamicFieldSet extends React.Component {
     constructor(props) {
         super(props);

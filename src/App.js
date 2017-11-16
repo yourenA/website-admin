@@ -12,7 +12,6 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as loginAction from './actions/login';
 import * as responsiveAction from './actions/responsive';
-import {testPermission} from './common/common'
 import asyncComponent from './AsyncComponent'
 import MyLayout from './Layout';
 

@@ -3,7 +3,7 @@
  */
 import React from 'react'
 import asyncComponent from './AsyncComponent'
-import { Layout, Menu } from 'antd';
+import { Layout, } from 'antd';
 import {
     Route,
 } from 'react-router-dom';

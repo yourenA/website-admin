@@ -30,11 +30,6 @@ class AddOrEditNameForm extends React.Component {
         }
     }
     render() {
-        const formItemLayout = {
-            labelCol: {span: 6},
-            wrapperCol: {span: 18},
-        };
-        const {getFieldDecorator} = this.props.form;
         return (
             <form>
                     <div>

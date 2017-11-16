@@ -194,7 +194,7 @@ class Manufacture extends Component {
                 >
                     <li>
                         <div className="left">
-                            <img src={`${configJson.prefix}${item.contentUrl}`} alt="" onClick={()=>{that.openGallery(item.image)}} style={{cursor:'pointer'}}/>
+                            <img src={`${configJson.prefix}${item.contentUrl}`} alt="" onClick={()=>{that.openGallery(`${configJson.prefix}${item.contentUrl}`)}} style={{cursor:'pointer'}}/>
                         </div>
                         <div className="right">
                             <h3>{item.title}</h3>

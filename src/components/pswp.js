@@ -2,7 +2,6 @@
  * Created by Administrator on 2016/7/1.
  */
 import React from 'react'
-import PropTypes from 'prop-types';
 import PhotoSwipe from 'photoswipe';
 import PhotoswipeUIDefault from 'photoswipe/dist/photoswipe-ui-default';
 import 'photoswipe/dist/photoswipe.css';

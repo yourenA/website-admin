@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/3/24.
  */
 import React from 'react';
-import {Form, Input,Cascader} from 'antd';
+import {Form, Input} from 'antd';
 
 const FormItem = Form.Item;
 

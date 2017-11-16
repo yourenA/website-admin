@@ -47,7 +47,7 @@ class Partner extends Component {
         const addName = this.refs.AddName.getFieldsValue();
         let postData={name:addName.name};
         if(addName.residence.length===1){
-            postData.city=addName.residence[0]
+            postData.province=addName.residence[0]
         }else if(addName.residence.length===2){
             postData.province=addName.residence[0]
             postData.city=addName.residence[1]
@@ -127,7 +127,7 @@ class Partner extends Component {
             key: 'city',
             render: (text, record, index) => {
                 return(
-                    <p>{`${record.province?record.province+'/':''}${text}`}</p>
+                    <p>{`${record.province}${text?'/'+text:null}`}</p>
                 )
             }
         }

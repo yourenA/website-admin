@@ -147,7 +147,12 @@ class Manufacture extends Component {
 
                 <Content style={{background: '#fff', padding: '10px'}}>
                     <Breadcrumb className="breadcrumb">
-                        <Breadcrumb.Item>产品分类</Breadcrumb.Item>
+                        <Breadcrumb.Item
+                            style={{cursor:'pointer'}}
+                            onClick={()=>{
+                                this.props.history.goBack();
+                            }}
+                        >产品分类</Breadcrumb.Item>
                         <Breadcrumb.Item>{`${this.props.match.params.categoryId}`}</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="operate-box">

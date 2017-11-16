@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/3/24.
  */
 import React from 'react';
-import {Form, Input,message,Button} from 'antd';
+import {Form, Input,Button} from 'antd';
 import UploadImg from './../../components/uploadImg'
 const FormItem = Form.Item;
 

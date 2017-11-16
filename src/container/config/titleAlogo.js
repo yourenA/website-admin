@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React from 'react'
-import {Button, message, Icon, Upload, Input, Form} from 'antd';
+import {Button, message, Input, Form} from 'antd';
 import axios from 'axios'
 import configJson from 'configJson' ;
 import UploadImg from './../../components/uploadImg'

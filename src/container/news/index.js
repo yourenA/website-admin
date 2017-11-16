@@ -2,16 +2,16 @@
  * Created by Administrator on 2017/6/14.
  */
 import React, {Component} from 'react';
-import {Breadcrumb, Table, Icon, Button, Modal, Popconfirm, Layout,message} from 'antd';
+import {Icon, Button, Modal, Popconfirm, Layout,message} from 'antd';
 import axios from 'axios'
 import configJson from 'configJson' ;
 import {processResult} from './../../common/common';
 import AddOrEditName from './addOrEditNmae';
 import Avatar from './avatar';
-import avatar from './../../images/avatar.png'
 import {connect} from 'react-redux';
 import './index.less'
 import Pswp  from './../../components/pswp'
+import moment from 'moment';
 const {Content,} = Layout;
 class Manufacture extends Component {
     constructor(props) {
@@ -150,14 +150,13 @@ class Manufacture extends Component {
         })
     }
     render() {
-        const {data, page, meta} = this.state;
         const that=this;
         const renderNews=this.state.data.map(function (item,index) {
             return(
                 <li key={index}>
                     <div className="news-content">
                         <div className="date">
-                            {item.date}
+                            {moment(item.createdAt).format("YYYY-MM-DD")}
                         </div>
                         <div className="desc">{item.description}</div>
                         <div className="image">{item.imageUrl?<img src={`${configJson.prefix}${item.imageUrl}`} alt="" onClick={()=>that.openGallery(`${configJson.prefix}${item.imageUrl}`)}/>:null}</div>

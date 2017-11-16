@@ -13,7 +13,6 @@ class TitleAndLogo extends React.Component {
     constructor(props) {
         super(props);
 
-        const value = this.props.value || {};
         this.state = {
             friendshipLink:[{name:'xxxx公司',url:'http://baidu.com'},{name:'xxxx公司',url:'http://baidu.com'},],
         };

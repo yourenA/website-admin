@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/10/11.
  */
 import React, {Component} from 'react';
-import {Table,Popconfirm,Pagination,Button,Modal} from 'antd';
+import {Table, Popconfirm, Pagination, Button, Modal,Tooltip} from 'antd';
 import axios from 'axios'
 import configJson from 'configJson' ;
 import {processResult} from './../../common/common.js';
@@ -20,9 +20,11 @@ class Partner extends Component {
             addModal: false
         };
     }
+
     componentDidMount() {
         this.getInfo();
     }
+
     getInfo = ()=> {
         const that = this;
         axios({
@@ -42,7 +44,7 @@ class Partner extends Component {
             });
 
     }
-    addData=()=>{
+    addData = ()=> {
         const that = this;
         const addName = this.refs.AddName.getFieldsValue();
         axios({
@@ -62,7 +64,7 @@ class Partner extends Component {
             console.log('获取出错', error);
         })
     }
-    editData=()=>{
+    editData = ()=> {
         const that = this;
         const editName = this.refs.EditName.getFieldsValue();
         axios({
@@ -82,9 +84,9 @@ class Partner extends Component {
             console.log('获取出错', error);
         })
     }
-    delData=(id)=>{
+    delData = (id)=> {
         console.log(id)
-        const that=this;
+        const that = this;
         axios({
             url: `${configJson.prefix}/link/del/${id}`,
             method: 'POST',
@@ -98,6 +100,7 @@ class Partner extends Component {
             console.log('获取出错', error);
         })
     }
+
     render() {
         const {data, page, meta} = this.state;
         const columns = [{
@@ -110,8 +113,10 @@ class Partner extends Component {
             key: 'url',
             render: (text, record, index) => {
                 return (
-
-                    <a href={text} target="_blank"> {text&&text.length > 10 ? text.substring(0, 10) + '...' :text}</a>
+                    <Tooltip title={text}>
+                        <a href={text}
+                           target="_blank"> {text && text.length > 10 ? text.substring(0, 10) + '...' : text}</a>
+                    </Tooltip>
                 )
             }
         }
@@ -142,7 +147,9 @@ class Partner extends Component {
 
         return (
             <div>
-                <Button type="primary" icon="plus" style={{marginBottom:'10px'}} onClick={()=>{this.setState({addModal:true})}}>添加</Button>
+                <Button type="primary" icon="plus" style={{marginBottom: '10px'}} onClick={()=> {
+                    this.setState({addModal: true})
+                }}>添加</Button>
                 <Table bordered
                        size="small"
                        rowKey="id" columns={columns}
@@ -166,8 +173,8 @@ class Partner extends Component {
                         </Button>,
                     ]}
                 >
-                    <AddOrEditName  ref="AddName"
-                                    />
+                    <AddOrEditName ref="AddName"
+                    />
                 </Modal>
                 <Modal
                     key={ Date.parse(new Date()) + 1}
@@ -186,8 +193,8 @@ class Partner extends Component {
                         </Button>,
                     ]}
                 >
-                    <AddOrEditName  ref="EditName" editRecord={this.state.editRecord}
-                                    isEdit={true} />
+                    <AddOrEditName ref="EditName" editRecord={this.state.editRecord}
+                                   isEdit={true}/>
                 </Modal>
             </div>
 

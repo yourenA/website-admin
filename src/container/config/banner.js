@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React, {Component} from 'react'
-import {Button, message, Alert, Upload, Tooltip, Form, Popconfirm, Modal} from 'antd';
+import {Button, message, Alert,  Tooltip, Form, Popconfirm, Modal} from 'antd';
 import {sortable} from 'react-sortable';
 import AddOrEditBanner from './addOrEditBanner';
 import './banner.less'

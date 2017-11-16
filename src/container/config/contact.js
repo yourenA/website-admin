@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React from 'react'
-import { Button,Input, Form,message} from 'antd';
+import { Button,Input, Form} from 'antd';
 import axios from 'axios'
 import configJson from 'configJson' ;
 import { processResult} from './../../common/common.js';

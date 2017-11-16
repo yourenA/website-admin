@@ -2,8 +2,7 @@
  * Created by Administrator on 2017/6/13.
  */
 import React from 'react'
-import { Row, Col, Card, Timeline, Icon } from 'antd';
-import Masonry from 'react-masonry-component';
+import { Row, Col, Card } from 'antd';
 import Count from './count'
 import City from './city'
 import Proportion from './proportion'
@@ -13,15 +12,11 @@ class Data extends React.Component {
     constructor(props) {
         super(props);
 
-        const value = this.props.value || {};
         this.state = {
         };
     }
 
     render() {
-        var masonryOptions = {
-            transitionDuration: 0
-        };
         return (
             <div className="content config web-data">
                 <Row >

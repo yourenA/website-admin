@@ -18,7 +18,6 @@ class UserManageSearch extends Component {
 
     onChangeSearchText = (value)=> {
         console.log(value)
-        const {  page}=this.props;
         // this.props.onChangeSearch(1, page,value)
     };
     onChange=(date, dateString) =>{

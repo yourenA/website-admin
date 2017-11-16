@@ -119,7 +119,7 @@ export function getBetweemDay(begin, end) {
     var unixDe = de.getTime();
     var result=[];
     for (var k = unixDb; k <= unixDe;) {
-        result.push(moment(parseInt(k)).format("YYYY-MM-DD"))
+        result.push(moment(parseInt(k)).format("YYYY-MM-DD"));
         k = k + 24 * 60 * 60 * 1000;
     }
     return result
@@ -131,7 +131,7 @@ export function provinceAndCity() {
         let item={};
         item.value=key.replace(/市|省/, '');
         item.label=key.replace(/市|省/, '');
-        if(ProvinceCity[key].length>1){
+        if(ProvinceCity[key].length){
             item.children=ProvinceCity[key].reduce(function(arr, value) {
                 return arr.concat({value:value.replace(/市|省/, ''),label:value.replace(/市|省/, '')});
             }, []);

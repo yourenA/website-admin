@@ -2,8 +2,7 @@
  * Created by Administrator on 2017/3/8.
  */
 import {message} from 'antd';
-import messageJson from './../common/message.json';
-import {removeLoginStorage, processResult} from './../common/common.js';
+import {removeLoginStorage} from './../common/common.js';
 import configJson from 'configJson' ;
 import axios from 'axios';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';

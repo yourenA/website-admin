@@ -2,7 +2,7 @@
  * Created by hao.cheng on 2017/4/13.
  */
 import React, { Component } from 'react';
-import { Menu, Icon, Layout, Popconfirm, Popover } from 'antd';
+import {  Icon, Layout, Popconfirm, Popover } from 'antd';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as loginAction from './../actions/login';
