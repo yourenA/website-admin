@@ -22,7 +22,7 @@ export function checkLogin() {
             });
             return true
         } else {
-            window.location.replace("/login")
+            // window.location.replace("/login")
         }
     }
 }
