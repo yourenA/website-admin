@@ -15,22 +15,10 @@ class AddOrEditNameForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            imageUrl:'',
-            name:''
+            productData:{}
         };
     }
 
-    componentDidMount() {
-        this.getInfo();
-
-    }
-    getInfo=()=>{
-        this.setState({
-            name:this.props.productId,
-            imageUrl:pc1
-        },function () {
-        })
-    }
     handleSubmit = (e) => {
         e?e.preventDefault():null
         const that=this
@@ -39,7 +27,9 @@ class AddOrEditNameForm extends React.Component {
             if (!err) {
                 var formData = new FormData();
                 formData.append("name",values.name);
-                formData.append("productUrl",document.querySelector('#productDetailFile').files[0]);
+                if(document.querySelector('#productDetailFile').files[0]){
+                    formData.append("productUrl",document.querySelector('#productDetailFile').files[0]);
+                }
                 axios({
                     url: `${configJson.prefix}/product/edit/${this.props.productId}`,
                     method: 'POST',
@@ -48,7 +38,8 @@ class AddOrEditNameForm extends React.Component {
                 })
                     .then(function (response) {
                         console.log(response.data)
-                        processResult(response)
+                        processResult(response);
+                        that.props.getInfo()
                     }).catch(function (error) {
                     console.log('获取出错', error);
                 })
@@ -80,7 +71,7 @@ class AddOrEditNameForm extends React.Component {
                             label={'产品名称'}
                             {...formItemLayout}>
                             {getFieldDecorator('name', {
-                                initialValue: this.state.name,
+                                initialValue: this.props.productData.name,
                             })(
                                 <Input  />
                             )}
@@ -89,7 +80,7 @@ class AddOrEditNameForm extends React.Component {
                             label={'顶部图片'}
                             {...formItemLayout}
                         >
-                            <UploadImg  fileId="productDetailFile" imgId="productDetailPreview" changeImg={this.changeImg} imgUrl={this.props.productUrl} />
+                            <UploadImg  fileId="productDetailFile" imgId="productDetailPreview" changeImg={this.changeImg} imgUrl={this.props.productData.productUrl} />
                         </FormItem>
                         <div className="edit-btn">
                             <Button type="primary" htmlType="submit">确定</Button>

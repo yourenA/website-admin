@@ -21,9 +21,8 @@ class Manufacture extends Component {
         this.state = {
             data: [],
             loading: false,
-            q: '',
+            query: '',
             page: 1,
-            meta: {pagination: {total: 0, per_page: 0}},
             editModal: false,
             addModal: false,
             open:0,
@@ -36,11 +35,14 @@ class Manufacture extends Component {
         this.getInfo(this.state.currentPage);
     }
 
-    getInfo = (currentPage)=> {
+    getInfo = (currentPage,query)=> {
         const that = this;
         axios({
             url: `${configJson.prefix}/classify/${currentPage}`,
             method: 'get',
+            params:{
+                name:query
+            }
         })
             .then(function (response) {
                 console.log(response);
@@ -85,7 +87,7 @@ class Manufacture extends Component {
                     that.setState({
                         addModal: false
                     });
-                    that.getInfo(that.state.currentPage)
+                    that.getInfo(that.state.currentPage,that.state.query)
                 })
             }).catch(function (error) {
             console.log('获取出错', error);
@@ -116,7 +118,7 @@ class Manufacture extends Component {
                     that.setState({
                         editModal: false
                     });
-                    that.getInfo(that.state.currentPage)
+                    that.getInfo(that.state.currentPage,that.state.query)
                 })
             }).catch(function (error) {
             console.log('获取出错', error);
@@ -131,22 +133,22 @@ class Manufacture extends Component {
             .then(function (response) {
                 console.log(response.data)
                 processResult(response, function () {
-                    that.getInfo(that.state.currentPage)
+                    that.getInfo(that.state.currentPage,that.state.query)
                 })
             }).catch(function (error) {
             console.log('获取出错', error);
         })
     }
 
-    onChangeSearch = (page, q,)=> {
+    onChangeSearch = (currentPage, query,)=> {
         this.setState({
-            page, q,
+            currentPage, query,
         })
-        this.fetchHwData(page, q);
+        this.getInfo(currentPage, query);
     }
-    onPageChange = (page) => {
-        const {q}=this.state;
-        this.onChangeSearch(page, q);
+    onPageChange = (currentPage) => {
+        const {query}=this.state;
+        this.onChangeSearch(currentPage, query);
     };
     openGallery=(image)=>{
         this.setState({
@@ -232,7 +234,6 @@ class Manufacture extends Component {
         }];
         return (
             <div className="content config">
-
                 <Content style={{background: '#fff', padding: '10px'}}>
                     <Breadcrumb className="breadcrumb">
                         <Breadcrumb.Item>产品分类</Breadcrumb.Item>
@@ -249,7 +250,7 @@ class Manufacture extends Component {
                            loading={this.state.loading}
                            rowKey="id" columns={columns}
                            dataSource={data} pagination={false}/>
-                    <Pagination total={meta.pagination.total} current={page} pageSize={meta.pagination.per_page}
+                    <Pagination total={this.state.count} current={this.state.currentPage} pageSize={10}
                                 style={{marginTop: '10px'}} onChange={this.onPageChange}/>
                     {
                         this.props.responsive.isMobile && (

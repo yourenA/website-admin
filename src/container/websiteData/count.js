@@ -20,7 +20,6 @@ export default class Data extends React.Component {
     }
 
     componentDidMount() {
-
         this.setState({
             rangePickerValue: getTimeDistance('month'),
         },function () {
@@ -35,20 +34,24 @@ export default class Data extends React.Component {
             url: `${configJson.prefix}/visitor/interval`,
             method: 'post',
             data:{
-
-                floor:this.state.rangePickerValue[0].format("YYYY-MM-DD"),
-                cap:this.state.rangePickerValue[1].format("YYYY-MM-DD")
+                floor:this.state.rangePickerValue[0].format("YYYYMMDD"),
+                cap:this.state.rangePickerValue[1].format("YYYYMMDD")
             }
         })
             .then(function (response) {
                 console.log(response);
                 if (response.data.status === 200) {
+                    let total=0;
+                    response.data.data.map((item,index)=>{
+                        total+=item
+                    })
+                    that.props.setTotal(total)
                     that.setState({
-                        data: response.data.data.arr,
+                        data: response.data.data,
                     },function () {
+
                         that.renderMap()
                     })
-
                 }
             })
             .catch(function (error) {

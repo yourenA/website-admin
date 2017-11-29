@@ -59,7 +59,9 @@ class Demo extends React.Component {
                 formData.append("name",values.name);
                 formData.append("description",values.description);
                 formData.append("copyright",values.copyright);
-                formData.append("logoUrl",document.querySelector('#file').files[0]);
+                if(document.querySelector('#file').files[0]){
+                    formData.append("logoUrl",document.querySelector('#file').files[0]);
+                }
                axios({
                     url: `${configJson.prefix}/baseInfo/edit`,
                     method: 'POST',

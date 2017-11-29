@@ -25,12 +25,32 @@ class Manufacture extends Component {
             editModal: false,
             addModal: false,
             imageUrl:'',
-            open:0
+            open:0,
+            avatarUrl:'',
         };
     }
 
     componentDidMount() {
         this.getInfo();
+        this.getUser();
+    }
+    getUser=()=>{
+        const that = this;
+        axios({
+            url: `${configJson.prefix}/user`,
+            method: 'get',
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.data.status === 200) {
+                    that.setState({
+                        avatarUrl: response.data.data[0].avatarUrl,
+                    })
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
     }
     getInfo = (currentPage)=> {
         const that = this;
@@ -42,7 +62,7 @@ class Manufacture extends Component {
                 console.log(response);
                 if (response.data.status === 200) {
                     that.setState({
-                        data: response.data.data.rows,
+                        data: response.data.data.rows.reverse(),
                         count: response.data.data.count
                     })
                 }
@@ -178,7 +198,7 @@ class Manufacture extends Component {
                         <div className="news-top">
                             <div className="left-avatar">
                                 <div className="left-avatar">
-                                    <Avatar />
+                                    <Avatar avatarUrl={this.state.avatarUrl}/>
                                 </div>
                             </div>
                             <div className="right-input">

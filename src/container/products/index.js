@@ -20,26 +20,51 @@ class Manufacture extends Component {
         this.state = {
             data: [],
             loading: false,
-            q: '',
+            query: '',
             page: 1,
             meta: {pagination: {total: 0, per_page: 0}},
             editModal: false,
             addModal: false,
             currentPage:1,
-            count:0
+            count:0,
+            categoryName:''
         };
     }
 
     componentDidMount() {
         this.getInfo(this.state.currentPage);
+        this.getCategoryName()
     }
-
-    getInfo = (currentPage)=> {
+    getCategoryName=()=>{
+        const that = this;
+        axios({
+            url: `${configJson.prefix}/classify/getById`,
+            method: 'get',
+            params:{
+                id:this.props.match.params.categoryId
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.data.status === 200) {
+                    that.setState({
+                        categoryName: response.data.data.name,
+                    })
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
+    }
+    getInfo = (currentPage,query)=> {
         console.log(this.props)
         const that = this;
         axios({
             url: `${configJson.prefix}/product/${this.props.match.params.categoryId}/${currentPage}`,
             method: 'get',
+            params:{
+                name:query
+            }
         })
             .then(function (response) {
                 console.log(response);
@@ -79,7 +104,7 @@ class Manufacture extends Component {
                     that.setState({
                         addModal: false
                     });
-                    that.getInfo(that.state.currentPage)
+                    that.getInfo(that.state.currentPage,that.state.query)
                 })
             }).catch(function (error) {
             console.log('获取出错', error);
@@ -94,22 +119,22 @@ class Manufacture extends Component {
             .then(function (response) {
                 console.log(response.data)
                 processResult(response, function () {
-                    that.getInfo(that.state.currentPage)
+                    that.getInfo(that.state.currentPage,that.state.query)
                 })
             }).catch(function (error) {
             console.log('获取出错', error);
         })
     }
 
-    onChangeSearch = (page, q,)=> {
+    onChangeSearch = (currentPage, query,)=> {
         this.setState({
-            page, q,
+            currentPage, query,
         })
-        this.fetchHwData(page, q);
+        this.getInfo(currentPage, query);
     }
-    onPageChange = (page) => {
-        const {q}=this.state;
-        this.onChangeSearch(page, q);
+    onPageChange = (currentPage) => {
+        const {query}=this.state;
+        this.onChangeSearch(currentPage, query);
     };
 
     render() {
@@ -153,7 +178,7 @@ class Manufacture extends Component {
                                 this.props.history.goBack();
                             }}
                         >产品分类</Breadcrumb.Item>
-                        <Breadcrumb.Item>{`${this.props.match.params.categoryId}`}</Breadcrumb.Item>
+                        <Breadcrumb.Item>{this.state.categoryName}</Breadcrumb.Item>
                     </Breadcrumb>
                     <div className="operate-box">
                         <SearchWrap onChangeSearch={this.onChangeSearch} {...this.state} {...this.props}/>
@@ -164,7 +189,7 @@ class Manufacture extends Component {
                            size={this.props.responsive.isMobile?'small':'default'}
                            rowKey="id" columns={columns}
                            dataSource={data} pagination={false}/>
-                    <Pagination total={meta.pagination.total} current={page} pageSize={meta.pagination.per_page}
+                    <Pagination total={this.state.count} current={this.state.currentPage} pageSize={10}
                                 style={{marginTop: '10px'}} onChange={this.onPageChange}/>
                     {
                         this.props.responsive.isMobile && (

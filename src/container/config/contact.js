@@ -6,6 +6,7 @@ import { Button,Input, Form} from 'antd';
 import axios from 'axios'
 import configJson from 'configJson' ;
 import { processResult} from './../../common/common.js';
+import UploadImg from './../../components/uploadImg'
 const FormItem = Form.Item;
 
 class Demo extends React.Component {
@@ -23,6 +24,7 @@ class Demo extends React.Component {
                 console.log(response);
                 if(response.data.status===200){
                     that.setState({
+                        contactUrl:response.data.data[0].contactUrl,
                         address:response.data.data[0].address,
                         tel:response.data.data[0].tel,
                         fax:response.data.data[0].fax,
@@ -39,15 +41,23 @@ class Demo extends React.Component {
     handleSubmit = (e) => {
         e?e.preventDefault():null;
         const that=this
-        console.log(that.state.imageUrl)
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
                 const that=this;
+                var formData = new FormData();
+                formData.append("address",values.address);
+                formData.append("tel",values.tel);
+                formData.append("fax",values.fax);
+                console.log('contact 图片',document.querySelector('#contactFile').files[0])
+                if(document.querySelector('#contactFile').files[0]){
+                    console.log('拥有图片')
+                    formData.append("contactUrl",document.querySelector('#contactFile').files[0]);
+                }
                 axios({
                     url: `${configJson.prefix}/contact/edit`,
                     method: 'post',
-                    data:{...values}
+                    data:formData
                 })
                     .then(function (response) {
                         console.log(response);
@@ -59,6 +69,20 @@ class Demo extends React.Component {
             }
         });
     }
+    changeImg=()=>{
+        console.log('changeImg')
+        var elem = document.getElementById('contactFile'),
+            img = document.getElementById('contactPreview'),
+            reader = new FileReader();
+        var files = elem.files;
+        console.log('img',img)
+        if (files && files[0]) {
+            reader.onload = function (ev) {
+                img.src = ev.target.result;
+            }
+            reader.readAsDataURL(files[0]);//在客户端上传图片之后通过 readAsDataURL() 来显示图片。
+        }
+    }
     render() {
         const {getFieldDecorator} = this.props.form;
         const formItemLayout = {
@@ -68,6 +92,12 @@ class Demo extends React.Component {
         return (
             <div >
                 <Form onSubmit={this.handleSubmit}>
+                    <FormItem
+                        {...formItemLayout}
+                        label="页面图片"
+                    >
+                        <UploadImg  fileId="contactFile" imgId="contactPreview" changeImg={this.changeImg} imgUrl={this.state.contactUrl} />
+                    </FormItem>
                     <FormItem
                         label="公司地址"
                         {...formItemLayout}>

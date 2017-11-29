@@ -13,9 +13,14 @@ class Data extends React.Component {
         super(props);
 
         this.state = {
+            total:0
         };
     }
-
+    setTotal=(total)=>{
+        this.setState({
+            total
+        })
+    }
     render() {
         return (
             <div className="content config web-data">
@@ -25,9 +30,9 @@ class Data extends React.Component {
                                 <Card bordered={false}>
                                     <div className="card-title">
                                         <h2>访问量统计</h2>
-                                        <small>总浏览数: <b>15200</b></small>
+                                        <small>浏览数: <b>{this.state.total}</b></small>
                                     </div>
-                                    <Count />
+                                    <Count setTotal={this.setTotal}/>
                                 </Card>
                             </div>
                         </Col>

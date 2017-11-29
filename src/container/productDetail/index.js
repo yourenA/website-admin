@@ -38,36 +38,62 @@ class Manufacture extends Component {
             addModal: false,
             imageUrl:'',
             open:0,
+            productData:{},
+            categoryName:''
         };
     }
 
     componentDidMount() {
         this.getInfo();
         this.getContent();
+        this.getCategoryName()
     }
-
-    getInfo = ()=> {
+    getCategoryName=()=>{
         const that = this;
         axios({
-            url: `${configJson.prefix}/classify/`,
+            url: `${configJson.prefix}/classify/getById`,
             method: 'get',
+            params:{
+                id:this.props.match.params.categoryId
+            }
         })
             .then(function (response) {
                 console.log(response);
                 if (response.data.status === 200) {
                     that.setState({
+                        categoryName: response.data.data.name,
                     })
                 }
             })
             .catch(function (error) {
                 console.log(error)
             });
-
+    }
+    getInfo=()=>{
+        const that = this;
+        axios({
+            url: `${configJson.prefix}/product/getById`,
+            method: 'get',
+            params:{
+                id:this.props.match.params.productId
+            }
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.data.status === 200) {
+                    that.setState({
+                        productData:response.data.data
+                    })
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            });
     }
     getContent=()=>{
         const that = this;
         axios({
-            url: `${configJson.prefix}/content/${this.props.match.params.productId}/1`,
+            url: `${configJson.prefix}/content/${this.props.match.params.productId}`,
             method: 'get',
         })
             .then(function (response) {
@@ -89,6 +115,22 @@ class Manufacture extends Component {
                     return item.id
                 })
                 console.log('sortArr',sortArr)
+                axios({
+                    url: `${configJson.prefix}/content/change`,
+                    method: 'post',
+                    data:{change:sortArr}
+                })
+                    .then(function (response) {
+                        console.log(response);
+                        if (response.data.status === 200) {
+                            message.success(response.data.body);
+                        } else {
+                            message.error(response.data.body);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
             }
         });
     }
@@ -215,18 +257,23 @@ class Manufacture extends Component {
 
                 <Content style={{background: '#fff', padding: '10px'}}>
                     <Breadcrumb className="breadcrumb">
-                        <Breadcrumb.Item>产品分类</Breadcrumb.Item>
+                        <Breadcrumb.Item
+                            style={{cursor:'pointer'}}
+                            onClick={()=>{
+                                this.props.history.push('/background/products')
+                            }}
+                        >产品分类</Breadcrumb.Item>
                         <Breadcrumb.Item
                             style={{cursor:'pointer'}}
                             onClick={()=>{
                             this.props.history.goBack();
-                        }}>{this.props.match.params.categoryId}</Breadcrumb.Item>
-                        <Breadcrumb.Item>{this.props.match.params.productId}</Breadcrumb.Item>
+                        }}>{this.state.categoryName}</Breadcrumb.Item>
+                        <Breadcrumb.Item>{this.state.productData.name}</Breadcrumb.Item>
                     </Breadcrumb>
                     <Col sm={24}  md={18} lg={10}>
                         <div >
                             <Card title="产品名称及顶部图片">
-                                <TitleImage productUrl={this.state.productUrl} productId={this.props.match.params.productId}/>
+                                <TitleImage getInfo={this.getInfo} productId={this.props.match.params.productId} productData={this.state.productData}/>
                             </Card>
                         </div>
                     </Col>

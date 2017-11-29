@@ -24,7 +24,7 @@ class TitleAndLogo extends React.Component {
                 <Row >
                     <Alert message="当配置项下方有'确定'按钮时，需要点击'确定'按钮才能保存数据。" type="info" closable
                            style={{marginTop: '10px', marginBottom: '10px'}}/>
-                        <Col xs={24} sm={24}  md={12} lg={8}>
+                        <Col xs={24} sm={24}  md={12} lg={12}>
                             <div className="gutter-box">
                                 <Card bordered={false}>
                                     <div className="card-title">
@@ -43,9 +43,16 @@ class TitleAndLogo extends React.Component {
                                     <Advantage2/>
                                 </Card>
                             </div>
-
+                            <div className="gutter-box">
+                                <Card bordered={false}>
+                                    <div className="card-title">
+                                        <h2>联系方式</h2>
+                                    </div>
+                                    <Contact/>
+                                </Card>
+                            </div>
                         </Col>
-                        <Col xs={24} sm={24}  md={12} lg={8}>
+                        <Col xs={24} sm={24}  md={12} lg={12}>
                             <div className="gutter-box">
                                 <Card bordered={false}>
                                     <div className="card-title">
@@ -60,16 +67,6 @@ class TitleAndLogo extends React.Component {
                                         <h2>友情链接</h2>
                                     </div>
                                     <FriendshipLink2 />
-                                </Card>
-                            </div>
-                        </Col>
-                        <Col  xs={24} sm={24}  md={12} lg={8}>
-                            <div className="gutter-box">
-                                <Card bordered={false}>
-                                    <div className="card-title">
-                                        <h2>联系方式</h2>
-                                    </div>
-                                    <Contact/>
                                 </Card>
                             </div>
                             <div className="gutter-box">

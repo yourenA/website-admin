@@ -6,15 +6,18 @@ import {Table,Pagination} from 'antd';
 import SearchWrap from './search'
 import axios from 'axios'
 import configJson from 'configJson' ;
-
+import moment from 'moment'
 class Detail extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: [],
             loading: true,
-            q: '',
-            page: 1,
+            ip:'',
+            city:'',
+            cap:'',
+            floor:'',
+            currentPage:1,
             meta: {pagination: {total: 0, per_page: 0}},
             editModal: false,
             addModal: false
@@ -24,11 +27,14 @@ class Detail extends Component {
         this.getInfo(this.state.currentPage);
     }
 
-    getInfo = (currentPage)=> {
+    getInfo = (currentPage,ip,city,cap,floor)=> {
         const that = this;
         axios({
-            url: `${configJson.prefix}/visitor`,
+            url: `${configJson.prefix}/visitor/${currentPage}`,
             method: 'get',
+            params:{
+                ip,city,cap,floor
+            }
         })
             .then(function (response) {
                 console.log(response);
@@ -44,9 +50,16 @@ class Detail extends Component {
             });
 
     }
-    delData=()=>{
-
+    onChangeSearch = (currentPage, ip,city,cap,floor)=> {
+        this.setState({
+            currentPage, ip,city,cap,floor
+        })
+        this.getInfo(currentPage, ip,city,cap,floor);
     }
+    onPageChange = (currentPage) => {
+        const {ip,city,cap,floor}=this.state;
+        this.onChangeSearch(currentPage, ip,city,cap,floor);
+    };
     render() {
         const {data, page, meta} = this.state;
         const columns = [{
@@ -64,23 +77,28 @@ class Detail extends Component {
             }
         }, {
             title: '访问次数',
-            dataIndex: 'count',
-            key: 'count',
+            dataIndex: 'ipCount',
+            key: 'ipCount',
         }, {
             title: '最后访问时间',
-            dataIndex: 'last_date',
-            key: 'last_date',
+            dataIndex: 'updated',
+            key: 'updated',
+            render:val=>{
+                return(
+                    <p>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</p>
+                )
+            }
         }];
 
         return (
             <div>
                 <div className="operate-box">
-                    <SearchWrap />
+                    <SearchWrap onChangeSearch={this.onChangeSearch} {...this.state} {...this.props}/>
                 </div>
                 <Table bordered
                        rowKey="id" columns={columns}
                        dataSource={data} pagination={false}/>
-                <Pagination total={meta.pagination.total} current={page} pageSize={meta.pagination.per_page}
+                <Pagination total={this.state.count} current={this.state.currentPage} pageSize={10}
                             style={{marginTop: '10px'}} onChange={this.onPageChange}/>
             </div>
 

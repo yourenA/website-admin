@@ -75,8 +75,8 @@ class App extends Component {
         });
     }
     render() {
+        console.log('responsive',this.props.responsive)
         const {loginState} = this.props;
-        console.log(loginState)
         return (
             <Router history={customHistory}>
                 <div style={{height:'100%'}}>
