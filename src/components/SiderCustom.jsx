@@ -83,7 +83,7 @@ class SiderCustom extends Component {
                         <Link to={'/background/products'}><Icon type="edit" /><span className="nav-text">产品与服务</span></Link>
                     </Menu.Item>
                     <Menu.Item key="/background/news">
-                        <Link to={'/background/news'}><Icon type="rocket" /><span className="nav-text">公司简闻</span></Link>
+                        <Link to={'/background/news'}><Icon type="rocket" /><span className="nav-text">公司新闻</span></Link>
                     </Menu.Item>
                     <Menu.Item key="/background/data">
                         <Link to={'/background/data'}><Icon type="line-chart" /><span className="nav-text">网站访问数据</span></Link>

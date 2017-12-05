@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "AMwares-admin",
+      "name": "ly-website-admin",
       "script": "./server.js",
       "env": {
         "NODE_ENV": "development"

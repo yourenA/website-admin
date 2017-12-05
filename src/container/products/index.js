@@ -60,10 +60,11 @@ class Manufacture extends Component {
         console.log(this.props)
         const that = this;
         axios({
-            url: `${configJson.prefix}/product/${this.props.match.params.categoryId}/${currentPage}`,
+            url: `${configJson.prefix}/product/${this.props.match.params.categoryId}`,
             method: 'get',
             params:{
-                name:query
+                name:query,
+                currentPage
             }
         })
             .then(function (response) {

@@ -38,10 +38,11 @@ class Manufacture extends Component {
     getInfo = (currentPage,query)=> {
         const that = this;
         axios({
-            url: `${configJson.prefix}/classify/${currentPage}`,
+            url: `${configJson.prefix}/classify`,
             method: 'get',
             params:{
-                name:query
+                name:query,
+                currentPage
             }
         })
             .then(function (response) {

@@ -57,7 +57,7 @@ class UserManageSearch extends Component {
                 />
                 <span className="ant-divider"/>
                 <span>城市 : </span>
-                <Cascader style={{marginBottom:'10px'}} placeholder="请选择" value={this.state.city} options={residences} onChange={this.onChangeCity}/>
+                <Cascader  placeholder="请选择" value={this.state.city} options={residences} onChange={this.onChangeCity}/>
                 <span className="ant-divider"/>
                 <span>最后访问时间 : </span>
                 <RangePicker onChange={this.onChangeRange} value={this.state.date}/>

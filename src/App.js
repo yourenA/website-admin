@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {
     BrowserRouter as Router,
     Route,
-    Redirect
+    Redirect,
+    Switch
 } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory'
 
@@ -80,12 +81,14 @@ class App extends Component {
         return (
             <Router history={customHistory}>
                 <div style={{height:'100%'}}>
-                    <Route path="/background/"  render={(props) => {
+                    <Switch>
+                    <Route  path="/background/"  render={(props) => {
                         return (loginState.login  ) ?
                             <MyLayout {...props}/> :
                             <Redirect to={{pathname: '/login'}}/>;
                     }}/>
                     <Route  path="/login" component={Login}/>
+                    <Redirect  from="/" to="/background/" /></Switch>
                 </div>
             </Router>
         );
