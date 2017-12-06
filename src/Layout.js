@@ -69,12 +69,11 @@ class MyLayout extends React.Component {
         })
             .then(function (response) {
                 console.log(response);
-                if (response.data.status === 200) {
-                    if(response.data.status===400){
-                        message.error('请先登陆')
-                        removeLoginStorage();
-                        that.props.history.push('/login')
-                    }
+                if(response.data.status===400){
+                    console.log('请先登陆')
+                    message.error('请先登陆')
+                    removeLoginStorage();
+                    that.props.history.push('/login')
                 }
             })
             .catch(function (error) {
