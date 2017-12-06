@@ -31,7 +31,7 @@ class AddOrEditNameForm extends React.Component {
                                 <a target="_blank" href="http://www.fontawesome.com.cn/faicons/">http://www.fontawesome.com.cn/faicons/</a></small>
                         </div>
                         <FormItem
-                            label={'名称'}
+                            label={'描述'}
                             {...formItemLayout}>
                             {getFieldDecorator('description', {
                                 initialValue: this.props.isEdit ? this.props.editRecord.description : '',

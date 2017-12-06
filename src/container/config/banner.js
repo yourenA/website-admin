@@ -86,6 +86,14 @@ class Demo extends React.Component {
             message.error('所有字段都不能为空');
             return false
         }
+        if(addName.title.length>20){
+            message.error('标题长度不能超过20');
+            return false
+        }
+        if(addName.description.length>80){
+            message.error('描述长度不能超过80');
+            return false
+        }
         var formData = new FormData();
         formData.append("title", addName.title);
         formData.append("description", addName.description);
@@ -117,6 +125,14 @@ class Demo extends React.Component {
                 message.error('所有字段都不能为空');
                 return false
             }
+        }
+        if(editName.title.length>20){
+            message.error('标题长度不能超过20');
+            return false
+        }
+        if(editName.description.length>80){
+            message.error('描述长度不能超过80');
+            return false
         }
         var formData = new FormData();
         formData.append("title", editName.title);

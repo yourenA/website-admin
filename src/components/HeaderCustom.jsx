@@ -1,19 +1,21 @@
 /**
  * Created by hao.cheng on 2017/4/13.
  */
-import React, { Component } from 'react';
-import {  Icon, Layout, Popconfirm, Popover } from 'antd';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {Icon, Layout, Popconfirm, Popover} from 'antd';
+import {Menu, Avatar, Dropdown, Spin, BackTop} from 'antd';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import * as loginAction from './../actions/login';
 import SiderCustom from './SiderCustom';
-const { Header } = Layout;
+const {Header} = Layout;
 
 class HeaderCustom extends Component {
     state = {
         user: '',
         visible: false,
     };
+
     componentDidMount() {
         // if (QueryString.hasOwnProperty('code')) {
         //     console.log(QueryString);
@@ -32,6 +34,7 @@ class HeaderCustom extends Component {
         //     });
         // }
     };
+
     // screenFull = () => {
     //     if (screenfull.enabled) {
     //         screenfull.request();
@@ -52,19 +55,36 @@ class HeaderCustom extends Component {
         });
     };
     handleVisibleChange = (visible) => {
-        this.setState({ visible });
+        this.setState({visible});
     };
-    confirm=()=>{
+    confirm = ()=> {
         this.props.signout()
     }
+    onMenuClick = ({ key }) => {
+        if (key === 'logout') {
+            this.props.signout()
+        }else if (key === 'setting') {
+            console.log('setting')
+            this.props.pushPath('/background/editPassword')
+        }
+    }
     render() {
-        const { responsive, path } = this.props;
+        const {responsive, path} = this.props;
+        const menu = (
+            <Menu selectedKeys={[]} onClick={this.onMenuClick} className="menu">
+                <Menu.Item  key="setting"><Icon type="setting"/>修改密码</Menu.Item>
+                <Menu.Divider />
+                <Menu.Item key="logout"><Icon type="logout"/>退出登录</Menu.Item>
+            </Menu>
+        );
         return (
-            <Header style={{ padding: 0, height: 65 }} className="custom-theme" >
+            <Header style={{padding: 0, height: 65}} className="custom-theme">
                 {
                     responsive.isMobile ? (
-                        <Popover content={<SiderCustom path={path} popoverHide={this.popoverHide} />} trigger="click" placement="bottomLeft" visible={this.state.visible} onVisibleChange={this.handleVisibleChange}>
-                            <Icon type="bars" className="trigger custom-trigger" />
+                        <Popover content={<SiderCustom path={path} popoverHide={this.popoverHide}/>} trigger="click"
+                                 placement="bottomLeft" visible={this.state.visible}
+                                 onVisibleChange={this.handleVisibleChange}>
+                            <Icon type="bars" className="trigger custom-trigger"/>
                         </Popover>
                     ) : (
                         <Icon
@@ -74,9 +94,13 @@ class HeaderCustom extends Component {
                         />
                     )
                 }
-                <Popconfirm title="确定要退出吗？" okText="确定" cancelText="取消"  placement="bottomRight" onConfirm={this.confirm}>
-                    <span className="logout">[退出系统]</span>
-                </Popconfirm>
+                <div className="float-right">
+                    <Dropdown overlay={menu} placement="bottomRight" >
+                         <span >
+                     <Avatar icon="user" className="user-icon"/>
+                        </span>
+                    </Dropdown>
+                </div>
 
                 <style>{`
                     .ant-menu-submenu-horizontal > .ant-menu {
@@ -88,13 +112,13 @@ class HeaderCustom extends Component {
         )
     }
 }
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
-        state:state,
+        state: state,
     };
 }
-function mapDispatchToProps(dispath){
-    return bindActionCreators(loginAction,dispath);
+function mapDispatchToProps(dispath) {
+    return bindActionCreators(loginAction, dispath);
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(HeaderCustom);
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderCustom);

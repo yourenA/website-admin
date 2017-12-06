@@ -2,7 +2,7 @@
  * Created by Administrator on 2017/10/11.
  */
 import React, {Component} from 'react';
-import {Table,Popconfirm,Pagination,Button,Modal} from 'antd';
+import {Table,Popconfirm,Pagination,Button,Modal,message} from 'antd';
 import axios from 'axios'
 import configJson from 'configJson' ;
 import {processResult} from './../../common/common.js';
@@ -45,6 +45,16 @@ class Partner extends Component {
     addData=()=>{
         const that = this;
         const addName = this.refs.AddName.getFieldsValue();
+        for(let key in  addName){
+            if(!addName[key]){
+                message.error('所有字段都不能为空');
+                return false
+            }
+        }
+        if(addName.description.length>10){
+            message.error('描述长度不能超过10');
+            return false
+        }
         axios({
             url: `${configJson.prefix}/advantage/add`,
             method: 'POST',
@@ -65,6 +75,16 @@ class Partner extends Component {
     editData=()=>{
         const that = this;
         const editName = this.refs.EditName.getFieldsValue();
+        for(let key in  editName){
+            if(!editName[key]){
+                message.error('所有字段都不能为空');
+                return false
+            }
+        }
+        if(editName.description.length>10){
+            message.error('描述长度不能超过10');
+            return false
+        }
         axios({
             url: `${configJson.prefix}/advantage/edit/${this.state.editId}`,
             method: 'POST',
